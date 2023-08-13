@@ -1,9 +1,13 @@
-import { Box, HStack, Image, Text, VStack, Button } from "@chakra-ui/react"
+import { Box, HStack, Image, Text, VStack, Button, Divider, Avatar } from "@chakra-ui/react"
 import { ChatSquareText, Heart, HeartFill } from "react-bootstrap-icons"
 import { API } from "../../../lib/api"
 import { useQuery } from "@tanstack/react-query"
 import { Reply } from "../types/Interfaces"
 import { useParams } from "react-router-dom"
+import { formatDistanceToNow } from "date-fns"
+import React from "react";
+import Loading from "../../../components/Loading"
+import ErrorMessage from "../../../components/Error"
 
 export default function Replies() {
     const { id } = useParams()
@@ -21,53 +25,55 @@ export default function Replies() {
 
     if (isLoading) {
         return (
-            <Box display='flex' justifyContent='center' alignItems='center'>
-                <Text>Loading...</Text>
-            </Box>
+            <Loading />
         )
     }
 
     if (isError) {
         return (
-            <Box display='flex' justifyContent='center' alignItems='center'>
-                <Text>Error while fetching the data</Text>
-            </Box>
+            <ErrorMessage />
         )
     }
 
     return (
         <Box
-            m={5}
+            m={4}
             display='flex'
-            justifyContent='center'
+            justifyContent='start'
             flexDirection='column'
-            alignItems='center'
-            gap={5}
+            alignItems='start'
+            gap={4}
         >
+            <Text>Total replies: {data.length}</Text>
             {data.map((item: Reply, index: number) => (
-                <HStack key={index} alignItems='top' gap={5} borderBottom='1px' pb={5}>
-                    <Image src={item.user.avatar} alt="User Profile Picture" borderRadius='full' boxSize='3rem' objectFit='cover' />
+                <React.Fragment key={index}>
+                <HStack alignItems='top' gap={4}>
+                    <Avatar name={item.user.full_name} src={item?.user.avatar} />
                     <Box display='flex' flexDirection='column' gap={1}>
                         <HStack>
                             <Text>{item.user.full_name}</Text>
-                            <Text>@{item.user.username}</Text>
-                            <Text>·</Text>
-                            {/* format created at to duration later */}
-                            <Text>{item.created_at} ago</Text>
+                            <Text textColor={"GrayText"}>@{item.user.username}</Text>
+                            <Text textColor={"GrayText"}>·</Text>
+                            {/* format created at to duration with date-fns*/}
+                            <Text textColor={"GrayText"}>{formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}</Text>
                         </HStack>
                         <VStack alignItems='start'>
                             <Text>{item.content}</Text>
-                            <Image src={item?.image} alt="User Attachment" borderRadius='.5rem' w='25rem' maxH='30rem' objectFit='cover' />
+                            {item?.image && (
+                                <Image src={item?.image} alt="User Attachment" borderRadius='.5rem' w='25rem' maxH='30rem' objectFit='cover' />
+                            )}
                         </VStack>
-                        <Box display='flex' gap={5} mt={4}>
+                        <HStack gap={4} mt={2}>
                             {item.is_liked ?
                                 <Button colorScheme='red' variant={"ghost"} leftIcon={<HeartFill />}>{item.number_of_likes}</Button>
                                 :
-                                <Button variant={"ghost"} leftIcon={<Heart />}>{item.number_of_likes}</Button>}
-                            <Button variant={"ghost"} leftIcon={<ChatSquareText />}>Reply</Button>
-                        </Box>
+                                <Button variant={"ghost"} leftIcon={<Heart />} textColor={"GrayText"}>{item.number_of_likes}</Button>}
+                            <Button variant={"ghost"} leftIcon={<ChatSquareText /> } textColor={"GrayText"}>Reply</Button>
+                        </HStack>
                     </Box>
                 </HStack>
+                <Divider />
+                </React.Fragment>
             ))}
         </Box>
     )

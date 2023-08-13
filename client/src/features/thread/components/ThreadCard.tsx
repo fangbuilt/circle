@@ -1,9 +1,13 @@
-import { Box, Image, Button, Text, HStack, VStack } from "@chakra-ui/react"
+import { Box, Image, Button, Text, HStack, VStack, Divider, Avatar } from "@chakra-ui/react"
 import { ChatSquareText, Heart, HeartFill } from "react-bootstrap-icons"
 import { Link } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import { Thread } from "../types/Interfaces";
 import { API } from "../../../lib/api";
+import { formatDistanceToNow } from "date-fns"
+import React from "react";
+import ErrorMessage from "../../../components/Error";
+import Loading from "../../../components/Loading";
 
 export default function ThreadCard() {
     const fetch = async () => {
@@ -19,55 +23,56 @@ export default function ThreadCard() {
 
     if (isLoading) {
         return (
-            <Box display='flex' justifyContent='center' alignItems='center'>
-                <Text>Loading...</Text>
-            </Box>
+            <Loading />
         )
     }
 
     if (isError) {
         return (
-            <Box display='flex' justifyContent='center' alignItems='center'>
-                <Text>Error while fetching the data</Text>
-            </Box>
+            <ErrorMessage />
         )
     }
 
     return (
         <Box
-            m={5}
+            m={4}
             display='flex'
-            justifyContent='center'
+            justifyContent='start'
             flexDirection='column'
-            alignItems='center'
-            gap={5}
+            alignItems='start'
+            gap={4}
         >
-            {data.map((item: Thread, index: number) => (
-                <HStack key={index} alignItems='top' gap={5} borderBottom='1px' pb={5}>
-                    <Image src={item.user.avatar} alt="User Profile Picture" borderRadius='full' boxSize='3rem' objectFit='cover' />
-                    <Box display='flex' flexDirection='column' gap={1}>
-                        <HStack>
-                            <Text>{item.user.full_name}</Text>
-                            <Text>@{item.user.full_name}</Text>
-                            <Text>·</Text>
-                            {/* format created at to duration later */}
-                            <Text>{item.created_at} ago</Text>
-                        </HStack>
-                        <VStack alignItems='start'>
-                            <Link to={`/${item.id}`}>
-                                <Text>{item.content}</Text>
-                            </Link>
-                            <Image src={item?.image} alt="User Attachment" borderRadius='.5rem' w='25rem' maxH='30rem' objectFit='cover' />
-                        </VStack>
-                        <Box display='flex' gap={5} mt={4}>
-                            {item.is_liked ?
-                                <Button colorScheme='red' variant={"ghost"} leftIcon={<HeartFill />}>{item.number_of_likes}</Button>
-                                :
-                                <Button variant={"ghost"} leftIcon={<Heart />}>{item.number_of_likes}</Button>}
-                            <Button variant={"ghost"} leftIcon={<ChatSquareText />}>{item.number_of_replies} Replies</Button>
+            {data.map((thread: Thread) => (
+                <React.Fragment key={thread.id}>
+                    <HStack alignItems='top' gap={4}>
+                        <Avatar name={thread.user.full_name} src={thread?.user.avatar} />
+                        <Box display='flex' flexDirection='column' gap={1}>
+                            <HStack>
+                                <Text fontWeight={"bold"}>{thread.user.full_name}</Text>
+                                <Text textColor={"GrayText"}>@{thread.user.full_name}</Text>
+                                <Text textColor={"GrayText"}>·</Text>
+                                {/* format created at to duration with date-fns */}
+                                <Text textColor={"GrayText"}>{formatDistanceToNow(new Date(thread.created_at), { addSuffix: true })}</Text>
+                            </HStack>
+                            <VStack alignItems='start'>
+                                <Link to={`/${thread.id}`}>
+                                    <Text>{thread.content}</Text>
+                                </Link>
+                                {thread?.image && (
+                                    <Image src={thread.image} alt="User Attachment" borderRadius='.5rem' w='25rem' maxH='30rem' objectFit='cover' />
+                                )}
+                            </VStack>
+                            <HStack gap={4} mt={2}>
+                                {thread.is_liked ?
+                                    <Button colorScheme='red' variant={"ghost"} leftIcon={<HeartFill />}>{thread.number_of_likes}</Button>
+                                    :
+                                    <Button variant={"ghost"} leftIcon={<Heart />} textColor={"GrayText"}>{thread.number_of_likes}</Button>}
+                                <Button variant={"ghost"} leftIcon={<ChatSquareText />} textColor={"GrayText"}>{thread.replies?.length} Reply</Button>
+                            </HStack>
                         </Box>
-                    </Box>
-                </HStack>
+                    </HStack>
+                    <Divider />
+                </React.Fragment>
             ))}
         </Box>
     )

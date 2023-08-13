@@ -1,9 +1,13 @@
-import { Box, Button, HStack, Image, Text, VStack } from "@chakra-ui/react"
+import { Avatar, Box, Button, Divider, HStack, Image, Text, VStack } from "@chakra-ui/react"
 import { ChatSquareText, Heart, HeartFill } from "react-bootstrap-icons"
 import { API } from "../../../lib/api"
 import { useQuery } from "@tanstack/react-query"
 import { Thread } from "../types/Interfaces"
 import { useParams } from "react-router-dom"
+import { format } from "date-fns"
+import React from "react";
+import ErrorMessage from "../../../components/Error"
+import Loading from "../../../components/Loading"
 
 export default function ThreadCardDetail() {
     const { id } = useParams()
@@ -21,60 +25,59 @@ export default function ThreadCardDetail() {
 
     if (isLoading) {
         return (
-            <Box display='flex' justifyContent='center' alignItems='center'>
-                <Text>Loading...</Text>
-            </Box>
+            <Loading />
         )
     }
 
     if (isError) {
         return (
-            <Box display='flex' justifyContent='center' alignItems='center'>
-                <Text>Error while fetching the data</Text>
-            </Box>
+            <ErrorMessage />
         )
     }
 
     const item = data
 
     return (
-        <Box
-            m={5}
-            display='flex'
-            justifyContent='center'
-            flexDirection='column'
-            alignItems='center'
-            gap={5}>
-            <VStack alignItems='top' gap={5} pb={5}>
-                <HStack>
-                    <Image src={item.user.avatar} alt="User Profile Picture" borderRadius='full' boxSize='3rem' objectFit='cover' />
-                    <VStack alignItems='start' gap={0}>
-                        <Text>{item.user.full_name}</Text>
-                        <Text>@{item.user.username}</Text>
-                    </VStack>
-                </HStack>
-                <Box display='flex' flexDirection='column' gap={1}>
-                    <VStack alignItems='start'>
-                        <Text>{item.content}</Text>
-                        <Image src={item?.image} alt="User Attachment" borderRadius='.5rem' w='25rem' maxH='30rem' objectFit='cover' />
-                    </VStack>
-                    <HStack mt={5}>
-                        {/* format as time HH:MM AM */}
-                        <Text>{item.created_at}</Text>
-                        <Text>·</Text>
-                        {/* format as date Mon DD, YYYY */}
-                        <Text>{item.created_at}</Text>
+        <React.Fragment>
+            <Box
+                m={4}
+                display='flex'
+                justifyContent='start'
+                flexDirection='column'
+                alignItems='start'
+                gap={4}>
+                <VStack alignItems='top' gap={4}>
+                    <HStack gap={4}>
+                        <Avatar name={item.user.full_name} src={item?.user.avatar} />
+                        <VStack alignItems='start' gap={0}>
+                            <Text fontWeight={"bold"}>{item.user.full_name}</Text>
+                            <Text textColor={"GrayText"}>@{item.user.username}</Text>
+                        </VStack>
                     </HStack>
-                    <Box display='flex' gap={5} mt={4}>
-                        {item.is_liked ?
-                            <Button colorScheme='red' variant={"ghost"} leftIcon={<HeartFill />}>{item.number_of_likes}</Button>
-                            :
-                            <Button variant={"ghost"} leftIcon={<Heart />}>{item.number_of_likes}</Button>
-                        }
-                        <Button variant={"ghost"} leftIcon={<ChatSquareText />}>{item.number_of_replies} Replies</Button>
+                    <Box display='flex' flexDirection='column' gap={1}>
+                        <VStack alignItems='start'>
+                            <Text>{item.content}</Text>
+                            {item?.image && (
+                                <Image src={item.image} alt="User Attachment" borderRadius='.5rem' w='25rem' maxH='30rem' objectFit='cover' />
+                            )}
+                        </VStack>
+                        <HStack mt={5}>
+                            <Text textColor={"GrayText"}>{format(new Date(item.created_at), "hh:mm a")}</Text>
+                            <Text textColor={"GrayText"}>·</Text>
+                            <Text textColor={"GrayText"}>{format(new Date(item.created_at), "MMM dd, yyyy")}</Text>
+                        </HStack>
+                        <HStack gap={4} mt={2}>
+                            {item.is_liked ?
+                                <Button colorScheme='red' variant={"ghost"} leftIcon={<HeartFill />}>{item.number_of_likes}</Button>
+                                :
+                                <Button variant={"ghost"} leftIcon={<Heart />} textColor={"GrayText"}>{item.number_of_likes}</Button>
+                            }
+                            <Button variant={"ghost"} leftIcon={<ChatSquareText />} textColor={"GrayText"}>{item?.replies?.length} Reply</Button>
+                        </HStack>
                     </Box>
-                </Box>
-            </VStack>
-        </Box>
+                </VStack>
+            </Box>
+            <Divider />
+        </React.Fragment>
     )
 }

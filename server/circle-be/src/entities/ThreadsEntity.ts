@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn, AfterLoad } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, AfterLoad } from "typeorm"
 import { User } from "./UsersEntity"
 import { Reply } from "./RepliesEntity"
 
@@ -24,10 +24,6 @@ export class Thread {
 
     @OneToMany(() => Reply, (replies) => replies.thread)
     replies: Reply[]
-
-    //Temporary. Omit after I understand how to automatically get the number of related array
-    @Column({ nullable: true })
-    number_of_replies: number
 
     @ManyToOne(() => User, (user) => user.threads)
     user: User
