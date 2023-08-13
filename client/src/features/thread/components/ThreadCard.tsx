@@ -1,11 +1,37 @@
 import { Box, Image, Button, Text, HStack, VStack } from "@chakra-ui/react"
-import { useState } from "react"
-import DummyData from "../../../utils/thread/thread.json"
 import { ChatSquareText, Heart, HeartFill } from "react-bootstrap-icons"
 import { Link } from "react-router-dom"
+import { useQuery } from "@tanstack/react-query"
+import { Thread } from "../types/Interfaces";
+import { API } from "../../../lib/api";
 
 export default function ThreadCard() {
-    const [threadData] = useState(DummyData)
+    const fetch = async () => {
+        try {
+            const response = await API.get("/threads")
+            return response.data
+        } catch (error) {
+            throw new Error("Error while getting thread data")
+        }
+    }
+
+    const { data, isLoading, isError } = useQuery<Thread[]>(["threads"], fetch)
+
+    if (isLoading) {
+        return (
+            <Box display='flex' justifyContent='center' alignItems='center'>
+                <Text>Loading...</Text>
+            </Box>
+        )
+    }
+
+    if (isError) {
+        return (
+            <Box display='flex' justifyContent='center' alignItems='center'>
+                <Text>Error while fetching the data</Text>
+            </Box>
+        )
+    }
 
     return (
         <Box
@@ -16,25 +42,29 @@ export default function ThreadCard() {
             alignItems='center'
             gap={5}
         >
-            {threadData.map((item, index) => (
+            {data.map((item: Thread, index: number) => (
                 <HStack key={index} alignItems='top' gap={5} borderBottom='1px' pb={5}>
-                    <Image src={item.profile_picture} alt="User Profile Picture" borderRadius='full' boxSize='3rem' objectFit='cover' />
+                    <Image src={item.user.avatar} alt="User Profile Picture" borderRadius='full' boxSize='3rem' objectFit='cover' />
                     <Box display='flex' flexDirection='column' gap={1}>
                         <HStack>
-                            <Text>{item.name}</Text>
-                            <Text>@{item.username}</Text>
+                            <Text>{item.user.full_name}</Text>
+                            <Text>@{item.user.full_name}</Text>
                             <Text>·</Text>
-                            <Text>{item.posted_since} ago</Text>
+                            {/* format created at to duration later */}
+                            <Text>{item.created_at} ago</Text>
                         </HStack>
                         <VStack alignItems='start'>
-                            <Link to={`/${item.thread_id}`}>
-                                <Text>{item.thread_content}</Text>
+                            <Link to={`/${item.id}`}>
+                                <Text>{item.content}</Text>
                             </Link>
-                            <Image src={item?.thread_attachment} alt="User Attachment" borderRadius='.5rem' w='25rem' maxH='30rem' objectFit='cover' />
+                            <Image src={item?.image} alt="User Attachment" borderRadius='.5rem' w='25rem' maxH='30rem' objectFit='cover' />
                         </VStack>
                         <Box display='flex' gap={5} mt={4}>
-                            {item.is_liked ? <Button colorScheme='red' variant={"ghost"} leftIcon={<HeartFill />}>{item.like_count}</Button> : <Button variant={"ghost"} leftIcon={<Heart />}>{item.like_count}</Button>}
-                            <Button variant={"ghost"} leftIcon={<ChatSquareText />}>{item.reply_count} Replies</Button>
+                            {item.is_liked ?
+                                <Button colorScheme='red' variant={"ghost"} leftIcon={<HeartFill />}>{item.number_of_likes}</Button>
+                                :
+                                <Button variant={"ghost"} leftIcon={<Heart />}>{item.number_of_likes}</Button>}
+                            <Button variant={"ghost"} leftIcon={<ChatSquareText />}>{item.number_of_replies} Replies</Button>
                         </Box>
                     </Box>
                 </HStack>

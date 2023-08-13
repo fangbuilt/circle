@@ -16,6 +16,13 @@ router.get("/threads-test", (req: Request, res: Response) => {
     })
 })
 
+//users routes
+router.get("/users", UsersController.findAll)
+router.get("/user/:id", UsersController.findByID)
+router.post("/user", UsersController.create)
+router.patch("/user/:id", UsersController.update)
+router.delete("/user/:id", UsersController.delete)
+
 //threads routes
 router.get("/threads", ThreadsController.findAll)
 router.get("/thread/:id", ThreadsController.findByID)
@@ -31,13 +38,7 @@ router.get("/reply/:id", RepliesController.findByID)
 router.post("/reply", RepliesController.create)
 router.patch("/reply/:id", RepliesController.update)
 router.delete("/reply/:id", RepliesController.delete)
-
-//users routes
-router.get("/users", UsersController.findAll)
-router.get("/user/:id", UsersController.findByID)
-router.post("/user", UsersController.create)
-router.patch("/user/:id", UsersController.update)
-router.delete("/user/:id", UsersController.delete)
+router.get("/thread/:thread_id/replies", RepliesController.findByThread)
 
 //follow routes
 

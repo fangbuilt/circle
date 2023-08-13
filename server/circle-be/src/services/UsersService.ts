@@ -24,7 +24,10 @@ class UsersService {
     async findByID(req: Request, res: Response): Promise<Response> {
         const id = parseInt(req.params.id)
         try {
-            const findAUser = await this.userRepository.findOne({ where: { id: id } })
+            const findAUser = await this.userRepository.findOne({ 
+                where: 
+                { id: id }
+            })
             if (!findAUser) {
                 return res.status(404).json({ error: "User not found" })
             }

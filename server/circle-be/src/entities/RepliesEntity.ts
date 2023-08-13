@@ -7,18 +7,10 @@ export class Reply {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
-    thread_id: number
-
-    @Column()
-    user_id: number
-
     @ManyToOne(() => Thread, (thread) => thread.replies)
-    @JoinColumn({ name: "thread_id"})
     thread: Thread
 
     @ManyToOne(() => User, (user) => user.replies)
-    @JoinColumn({ name: "user_id" })
     user: User
 
     @Column()
@@ -26,6 +18,14 @@ export class Reply {
 
     @Column({ nullable: true })
     image: string
+
+    //Temporary. Omit after like shenanigans are understandable
+    @Column({ nullable: true })
+    is_liked: boolean
+
+    //Temporary. Omit after like shenanigans are understandable
+    @Column({ nullable: true })
+    number_of_likes: number
 
     @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
     created_at: Date

@@ -10,6 +10,10 @@ class RepliesController {
         RepliesService.findByID(req, res)
     }
 
+    findByThread(req: Request, res: Response) {
+        RepliesService.findByThread(req, res)
+    }
+
     create(req: Request, res: Response) {
         RepliesService.create(req, res)
     }

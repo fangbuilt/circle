@@ -1,32 +1,39 @@
 import { Box, HStack, Image, Text, VStack, Button } from "@chakra-ui/react"
-import { useState } from "react"
-import DummyData from "../../../utils/thread/thread.json"
 import { ChatSquareText, Heart, HeartFill } from "react-bootstrap-icons"
+import { API } from "../../../lib/api"
+import { useQuery } from "@tanstack/react-query"
+import { Reply } from "../types/Interfaces"
 import { useParams } from "react-router-dom"
 
 export default function Replies() {
-    const [threadData] = useState(DummyData)
     const { id } = useParams()
 
-    if (!id) {
+    const fetch = async () => {
+        try {
+            const response = await API.get(`/thread/${id}/replies`)
+            return response.data
+        } catch (error) {
+            throw new Error("Error while getting reply data")
+        }
+    }
+
+    const { data, isLoading, isError } = useQuery<Reply[]>(["replies"], fetch)
+
+    if (isLoading) {
         return (
-            <div>
-                Thread not found
-            </div>
+            <Box display='flex' justifyContent='center' alignItems='center'>
+                <Text>Loading...</Text>
+            </Box>
         )
     }
 
-    const parseReplies = threadData.find(item => item.thread_id === parseInt(id))
-
-    if (!parseReplies) {
+    if (isError) {
         return (
-            <div>
-                This thread is no longer available
-            </div>
+            <Box display='flex' justifyContent='center' alignItems='center'>
+                <Text>Error while fetching the data</Text>
+            </Box>
         )
     }
-
-    const { replies } = parseReplies
 
     return (
         <Box
@@ -37,23 +44,27 @@ export default function Replies() {
             alignItems='center'
             gap={5}
         >
-            {replies.map((reply, index) => (
+            {data.map((item: Reply, index: number) => (
                 <HStack key={index} alignItems='top' gap={5} borderBottom='1px' pb={5}>
-                    <Image src={reply.profile_picture} alt="User Profile Picture" borderRadius='full' boxSize='3rem' objectFit='cover' />
+                    <Image src={item.user.avatar} alt="User Profile Picture" borderRadius='full' boxSize='3rem' objectFit='cover' />
                     <Box display='flex' flexDirection='column' gap={1}>
                         <HStack>
-                            <Text>{reply.name}</Text>
-                            <Text>@{reply.username}</Text>
+                            <Text>{item.user.full_name}</Text>
+                            <Text>@{item.user.username}</Text>
                             <Text>·</Text>
-                            <Text>{reply.posted_since} ago</Text>
+                            {/* format created at to duration later */}
+                            <Text>{item.created_at} ago</Text>
                         </HStack>
                         <VStack alignItems='start'>
-                            <Text>{reply.thread_content}</Text>
-                            <Image src={reply.thread_attachment} alt="User Attachment" borderRadius='.5rem' w='25rem' maxH='30rem' objectFit='cover' />
+                            <Text>{item.content}</Text>
+                            <Image src={item?.image} alt="User Attachment" borderRadius='.5rem' w='25rem' maxH='30rem' objectFit='cover' />
                         </VStack>
                         <Box display='flex' gap={5} mt={4}>
-                            {reply.is_liked ? <Button colorScheme='red' variant={"ghost"} leftIcon={<HeartFill />}>{reply.like_count}</Button> : <Button variant={"ghost"} leftIcon={<Heart />}>{reply.like_count}</Button>}
-                            <Button variant={"ghost"} leftIcon={<ChatSquareText />}>{reply.reply_count} Replies</Button>
+                            {item.is_liked ?
+                                <Button colorScheme='red' variant={"ghost"} leftIcon={<HeartFill />}>{item.number_of_likes}</Button>
+                                :
+                                <Button variant={"ghost"} leftIcon={<Heart />}>{item.number_of_likes}</Button>}
+                            <Button variant={"ghost"} leftIcon={<ChatSquareText />}>Reply</Button>
                         </Box>
                     </Box>
                 </HStack>
