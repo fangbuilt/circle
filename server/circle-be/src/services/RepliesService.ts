@@ -13,13 +13,25 @@ class RepliesService {
     //get all data
     async findAll(req: Request, res: Response): Promise<Response> {
         try {
-            const findReplies = await this.replyRepository.find({ relations: ["thread", "user"] })
-            if (!findReplies) {
-                return res.status(404).json({ error: "No replies available" })
+            const thread_id = parseInt(req.query.thread_id as string)
+            if (thread_id) {
+                const findAllRepliesByThread = await this.replyRepository.find({
+                    where: { thread: { id: thread_id } },
+                    relations: ["thread", "user"]
+                })
+                if (!findAllRepliesByThread) {
+                    return res.status(404).json({ Message: `No replies available for thread id ${thread_id}` })
+                }
+                return res.status(200).json(findAllRepliesByThread)
+            } else {
+                const findReplies = await this.replyRepository.find({ relations: ["thread", "user"] })
+                if (!findReplies.length) {
+                    return res.status(404).json({ Message: "No replies available" })
+                }
+                return res.status(200).json(findReplies)
             }
-            return res.status(200).json(findReplies)
-        } catch (err) {
-            return res.status(500).json({ error: "Error while getting all reply data" })
+        } catch (error) {
+            return res.status(500).json({ Message: "Error while getting replies" })
         }
     }
 
@@ -32,27 +44,11 @@ class RepliesService {
                 relations: ["thread", "user"]
             })
             if (!findAReply) {
-                return res.status(404).json({ error: "Can't find this reply" })
+                return res.status(404).json({ Message: "Can't find this reply" })
             }
             return res.status(200).json(findAReply)
         } catch (error) {
-            return res.status(500).json({ error: `Error while getting the reply with id number ${id}` })
-        }
-    }
-
-    async findByThread(req: Request, res: Response): Promise<Response> {
-        const thread_id = parseInt(req.params.thread_id)
-        try {
-            const findAllRepliesByThread = await this.replyRepository.find({
-                where: { thread: { id: thread_id } },
-                relations: ["thread", "user"]
-            })
-            if (!findAllRepliesByThread) {
-                return res.status(404).json({ error: `No replies available for thread id ${thread_id}` })
-            }
-            return res.status(200).json(findAllRepliesByThread)
-        } catch (error) {
-            return res.status(500).json({ error: `Error while getting replies for thread id ${thread_id}` })
+            return res.status(500).json({ Message: `Error while getting the reply with id number ${id}` })
         }
     }
 
@@ -60,19 +56,19 @@ class RepliesService {
     async create(req: Request, res: Response): Promise<Response> {
         const { error, value } = CreateReplySchema.validate(req.body)
         if (error) {
-            return res.status(422).json({ error: error })
+            return res.status(422).json({ Message: error })
         }
         const { thread, user, content, image } = value
         try {
             const threadRepository = AppDataSource.getRepository(Thread)
             const checkThreadID = await threadRepository.findOne({ where: { id: thread.id } })
             if (!checkThreadID) {
-                return res.status(404).json({ error: `Can not find the main thread id of ${thread.id} to this reply` })
+                return res.status(404).json({ Message: `Can not find the main thread id of ${thread.id} to this reply` })
             }
             const userRepository = AppDataSource.getRepository(User)
             const checkUserID = await userRepository.findOne({ where: { id: user.id } })
             if (!checkUserID) {
-                return res.status(404).json({ error: `User with id number ${user.id} is not available"` })
+                return res.status(404).json({ Message: `User with id number ${user.id} is not available"` })
             }
             const newReply = this.replyRepository.create({
                 thread: { id: thread.id },
@@ -83,7 +79,7 @@ class RepliesService {
             const saveNewReply = await this.replyRepository.save(newReply)
             return res.status(201).json(saveNewReply)
         } catch (error) {
-            return res.status(500).json({ error: "Error while creating this new reply" })
+            return res.status(500).json({ Message: "Error while creating this new reply" })
         }
     }
 
@@ -91,7 +87,7 @@ class RepliesService {
         const id = parseInt(req.params.id)
         const { error, value } = UpdateReplySchema.validate(req.body)
         if (error) {
-            return res.status(422).json({ error: error })
+            return res.status(422).json({ Message: error })
         }
         const { content, image } = value
         try {
@@ -100,7 +96,7 @@ class RepliesService {
                 relations: ["thread", "user"]
             })
             if (!findAReply) {
-                return res.status(404).json({ error: "Can't find this reply" })
+                return res.status(404).json({ Message: "Can't find this reply" })
             }
             if (content !== undefined && content !== "") {
                 findAReply.content = content
@@ -111,7 +107,7 @@ class RepliesService {
             const saveChanges = await this.replyRepository.save(findAReply)
             return res.status(200).json(saveChanges)
         } catch (error) {
-            return res.status(500).json({ error: `Error while updating the reply with id number ${id}` })
+            return res.status(500).json({ Message: `Error while updating the reply with id number ${id}` })
         }
     }
 
@@ -120,12 +116,12 @@ class RepliesService {
         try {
             const findAReply = await this.replyRepository.findOne({ where: { id: id } })
             if (!findAReply) {
-                return res.status(404).json({ error: "Can't find this reply" })
+                return res.status(404).json({ Message: "Can't find this reply" })
             }
             await this.replyRepository.remove(findAReply)
             return res.status(204).send()
         } catch (error) {
-            return res.status(500).json({ error: `Error while deleting the reply with id number ${id}` })
+            return res.status(500).json({ Message: `Error while deleting the reply with id number ${id}` })
         }
     }
 }

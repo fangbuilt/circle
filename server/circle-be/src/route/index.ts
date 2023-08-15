@@ -3,6 +3,8 @@ import { Request, Response } from "express"
 import ThreadsController from "../controllers/ThreadsController"
 import UsersController from "../controllers/UsersController"
 import RepliesController from "../controllers/RepliesController"
+import AuthController from "../controllers/AuthController"
+import authenticate from "../middlewares/Auth"
 
 const router = express.Router()
 
@@ -23,22 +25,26 @@ router.post("/user", UsersController.create)
 router.patch("/user/:id", UsersController.update)
 router.delete("/user/:id", UsersController.delete)
 
+//auth routes
+router.post("/auth/register", AuthController.register)
+router.post("/auth/login", AuthController.login)
+router.get("/check-auth", authenticate, AuthController.checkAuth)
+
 //threads routes
 router.get("/threads", ThreadsController.findAll)
 router.get("/thread/:id", ThreadsController.findByID)
-router.post("/thread", ThreadsController.create)
-router.patch("/thread/:id", ThreadsController.update)
-router.delete("/thread/:id", ThreadsController.delete)
+router.post("/thread", authenticate, ThreadsController.create)
+router.patch("/thread/:id", authenticate, ThreadsController.update)
+router.delete("/thread/:id", authenticate, ThreadsController.delete)
 
 //likes routes
 
 //replies routes
 router.get("/replies", RepliesController.findAll)
 router.get("/reply/:id", RepliesController.findByID)
-router.post("/reply", RepliesController.create)
-router.patch("/reply/:id", RepliesController.update)
-router.delete("/reply/:id", RepliesController.delete)
-router.get("/thread/:thread_id/replies", RepliesController.findByThread)
+router.post("/reply", authenticate, RepliesController.create)
+router.patch("/reply/:id", authenticate, RepliesController.update)
+router.delete("/reply/:id", authenticate, RepliesController.delete)
 
 //follow routes
 

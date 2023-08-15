@@ -12,15 +12,33 @@ class ThreadsService {
     //get all data
     async findAll(req: Request, res: Response): Promise<Response> {
         try {
-            const findThreads = await this.threadRepository.find({
-                relations: ["user"]
-            })
-            if (!findThreads) {
-                return res.status(404).json({ error: "No threads available" })
+            const limit = parseInt(req.query.limit as string)
+            if (limit) {
+                const limitFindThreads = await this.threadRepository.find({
+                    take: limit,
+                    relations: ["user", "replies"],
+                    order: {
+                        id: "DESC"
+                    }
+                })
+                if (!limitFindThreads) {
+                    return res.status(404).json({ error: "No threads available" })
+                }
+                return res.status(200).json(limitFindThreads)
+            } else {
+                const findThreads = await this.threadRepository.find({
+                    relations: ["user", "replies"],
+                    order: {
+                        id: "DESC"
+                    }
+                })
+                if (!findThreads) {
+                    return res.status(404).json({ error: "No threads available" })
+                }
+                return res.status(200).json(findThreads)
             }
-            return res.status(200).json(findThreads)
-        } catch (err) {
-            return res.status(500).json({ error: "Error while getting all thread data" })
+        } catch (error) {
+            return res.status(500).json({ Message: "Error while getting all thread data" })
         }
     }
 
@@ -30,15 +48,15 @@ class ThreadsService {
         try {
             const findAThread = await this.threadRepository.findOne({
                 where: { id: id },
-                relations: ["user"]
+                relations: ["user", "replies"]
             })
             if (!findAThread) {
                 return res.status(404).json({ error: "Thread not found" })
             }
             return res.status(200).json(findAThread)
-        } catch (err) {
+        } catch (error) {
 
-            return res.status(500).json({ err })
+            return res.status(500).json({ Message: `Error while finding the thread with id number ${id}` })
         }
     }
 
@@ -62,8 +80,8 @@ class ThreadsService {
             })
             const saveNewthread = await this.threadRepository.save(newThread)
             return res.status(201).json(saveNewthread)
-        } catch (err) {
-            return res.status(500).json({ err })
+        } catch (error) {
+            return res.status(500).json({ Message: "Error while creating this new thread" })
         }
     }
 
@@ -72,7 +90,7 @@ class ThreadsService {
         const id = parseInt(req.params.id)
         const { error, value } = UpdateThreadSchema.validate(req.body)
         if (error) {
-            return res.status(422).json({ error: error })
+            return res.status(422).json({ Message: error })
         }
         const { content, image } = value
         try {
@@ -91,8 +109,8 @@ class ThreadsService {
             }
             const saveChanges = await this.threadRepository.save(findAThread)
             return res.status(200).json(saveChanges)
-        } catch (err) {
-            return res.status(500).json({ error: `Error while updating the thread with id number ${id}` })
+        } catch (error) {
+            return res.status(500).json({ Message: `Error while updating the thread with id number ${id}` })
         }
     }
 
@@ -101,12 +119,12 @@ class ThreadsService {
         try {
             const findAThread = await this.threadRepository.findOne({ where: { id: id } })
             if (!findAThread) {
-                return res.status(404).json({ error: "Thread not found" })
+                return res.status(404).json({ Message: "Thread not found" })
             }
             await this.threadRepository.remove(findAThread)
             return res.status(204).send()
-        } catch (err) {
-            return res.status(500).json({ error: `Error while deleting the thread with id number ${id}` })
+        } catch (error) {
+            return res.status(500).json({ Message: `Error while deleting the thread with id number ${id}` })
         }
     }
 }

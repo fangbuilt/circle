@@ -35,7 +35,7 @@ export default function ThreadCardDetail() {
         )
     }
 
-    const item = data
+    const thread = data
 
     return (
         <React.Fragment>
@@ -48,31 +48,33 @@ export default function ThreadCardDetail() {
                 gap={4}>
                 <VStack alignItems='top' gap={4}>
                     <HStack gap={4}>
-                        <Avatar name={item.user.full_name} src={item?.user.avatar} />
+                        <Avatar name={thread.user.full_name} src={thread.user.avatar} />
                         <VStack alignItems='start' gap={0}>
-                            <Text fontWeight={"bold"}>{item.user.full_name}</Text>
-                            <Text textColor={"GrayText"}>@{item.user.username}</Text>
+                            <Text fontWeight={"bold"}>{thread.user.full_name}</Text>
+                            <Text textColor={"GrayText"}>@{thread.user.username}</Text>
                         </VStack>
                     </HStack>
                     <Box display='flex' flexDirection='column' gap={1}>
                         <VStack alignItems='start'>
-                            <Text>{item.content}</Text>
-                            {item?.image && (
-                                <Image src={item.image} alt="User Attachment" borderRadius='.5rem' w='25rem' maxH='30rem' objectFit='cover' />
+                            <Text>{thread.content}</Text>
+                            {thread?.image && (
+                                <Image src={thread.image} alt="User Attachment" borderRadius='.5rem' w='25rem' maxH='30rem' objectFit='cover' />
                             )}
                         </VStack>
                         <HStack mt={5}>
-                            <Text textColor={"GrayText"}>{format(new Date(item.created_at), "hh:mm a")}</Text>
+                            <Text textColor={"GrayText"}>{format(new Date(thread.created_at), "hh:mm a")}</Text>
                             <Text textColor={"GrayText"}>·</Text>
-                            <Text textColor={"GrayText"}>{format(new Date(item.created_at), "MMM dd, yyyy")}</Text>
+                            <Text textColor={"GrayText"}>{format(new Date(thread.created_at), "MMM dd, yyyy")}</Text>
                         </HStack>
                         <HStack gap={4} mt={2}>
-                            {item.is_liked ?
-                                <Button colorScheme='red' variant={"ghost"} leftIcon={<HeartFill />}>{item.number_of_likes}</Button>
+                            {thread.is_liked ?
+                                <Button colorScheme='red' variant={"ghost"} leftIcon={<HeartFill />}>{thread.number_of_likes}</Button>
                                 :
-                                <Button variant={"ghost"} leftIcon={<Heart />} textColor={"GrayText"}>{item.number_of_likes}</Button>
+                                <Button variant={"ghost"} leftIcon={<Heart />} textColor={"GrayText"}>{thread.number_of_likes}</Button>
                             }
-                            <Button variant={"ghost"} leftIcon={<ChatSquareText />} textColor={"GrayText"}>{item?.replies?.length} Reply</Button>
+                            <Button variant={"ghost"} leftIcon={<ChatSquareText />} textColor={"GrayText"}>
+                                {thread.replies.length == 0 ? "" : thread.replies.length} {thread.replies.length > 1 ? "Replies" : "Reply"}
+                            </Button>
                         </HStack>
                     </Box>
                 </VStack>

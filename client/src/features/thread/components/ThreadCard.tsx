@@ -12,7 +12,7 @@ import Loading from "../../../components/Loading";
 export default function ThreadCard() {
     const fetch = async () => {
         try {
-            const response = await API.get("/threads")
+            const response = await API.get(`/threads?limit=25`)
             return response.data
         } catch (error) {
             throw new Error("Error while getting thread data")
@@ -42,14 +42,14 @@ export default function ThreadCard() {
             alignItems='start'
             gap={4}
         >
-            {data.map((thread: Thread) => (
-                <React.Fragment key={thread.id}>
+            {data.map((thread: Thread, index: number) => (
+                <React.Fragment key={index}>
                     <HStack alignItems='top' gap={4}>
-                        <Avatar name={thread.user.full_name} src={thread?.user.avatar} />
+                        <Avatar name={thread.user.full_name} src={thread.user.avatar} />
                         <Box display='flex' flexDirection='column' gap={1}>
                             <HStack>
                                 <Text fontWeight={"bold"}>{thread.user.full_name}</Text>
-                                <Text textColor={"GrayText"}>@{thread.user.full_name}</Text>
+                                <Text textColor={"GrayText"}>@{thread.user.username}</Text>
                                 <Text textColor={"GrayText"}>·</Text>
                                 {/* format created at to duration with date-fns */}
                                 <Text textColor={"GrayText"}>{formatDistanceToNow(new Date(thread.created_at), { addSuffix: true })}</Text>
@@ -67,7 +67,9 @@ export default function ThreadCard() {
                                     <Button colorScheme='red' variant={"ghost"} leftIcon={<HeartFill />}>{thread.number_of_likes}</Button>
                                     :
                                     <Button variant={"ghost"} leftIcon={<Heart />} textColor={"GrayText"}>{thread.number_of_likes}</Button>}
-                                <Button variant={"ghost"} leftIcon={<ChatSquareText />} textColor={"GrayText"}>{thread.replies?.length} Reply</Button>
+                                <Button variant={"ghost"} leftIcon={<ChatSquareText />} textColor={"GrayText"}>
+                                    {thread.replies.length == 0 ? "" : thread.replies.length} {thread.replies.length > 1 ? "Replies" : "Reply"}
+                                </Button>
                             </HStack>
                         </Box>
                     </HStack>

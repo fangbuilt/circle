@@ -12,11 +12,11 @@ class UsersService {
         try {
             const findUsers = await this.userRepository.find()
             if (!findUsers) {
-                return res.status(404).json({ error: "No users available" })
+                return res.status(404).json({ Message: "No users available" })
             }
             return res.status(200).json(findUsers)
-        } catch (err) {
-            return res.status(500).json({ error: "Error while getting all user data" })
+        } catch (error) {
+            return res.status(500).json({ Message: "Error while getting all user data" })
         }
     }
 
@@ -29,11 +29,11 @@ class UsersService {
                 { id: id }
             })
             if (!findAUser) {
-                return res.status(404).json({ error: "User not found" })
+                return res.status(404).json({ Message: "User not found" })
             }
             return res.status(200).json(findAUser)
-        } catch (err) {
-            return res.status(500).json({ error: `Error while getting the user data with id number ${id}` })
+        } catch (error) {
+            return res.status(500).json({ Message: `Error while getting the user data with id number ${id}` })
         }
     }
 
@@ -58,8 +58,8 @@ class UsersService {
             })
             const saveNewUser = await this.userRepository.save(newUser)
             return res.status(201).json(saveNewUser)
-        } catch (err) {
-            return res.status(500).json({ message: "Error while creating this new user" })
+        } catch (error) {
+            return res.status(500).json({ Message: "Error while creating this new user" })
         }
     }
 
@@ -99,8 +99,8 @@ class UsersService {
             }
             const saveChanges = await this.userRepository.save(findAUser)
             return res.status(200).json(saveChanges)
-        } catch (err) {
-            return res.status(500).json({ error: `Error while updating the user data with id number ${id}` })
+        } catch (error) {
+            return res.status(500).json({ Message: `Error while updating the user data with id number ${id}` })
         }
     }
 
@@ -115,7 +115,7 @@ class UsersService {
             await this.userRepository.remove(findAUser)
             return res.status(204).send()
         } catch (error) {
-            return res.status(500).json({ error: `Error while deleting the user data with id number ${id}` })
+            return res.status(500).json({ Message: `Error while deleting the user data with id number ${id}` })
         }
     }
 }
