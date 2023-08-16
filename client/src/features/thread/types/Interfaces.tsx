@@ -22,6 +22,11 @@ export interface Thread {
     replies: Reply[]
 }
 
+export interface ThreadPost {
+    content: string,
+    image?: string,
+}
+
 export interface Reply {
     id: number,
     content: string,

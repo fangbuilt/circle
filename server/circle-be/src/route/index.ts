@@ -31,8 +31,8 @@ router.post("/auth/login", AuthController.login)
 router.get("/check-auth", authenticate, AuthController.checkAuth)
 
 //threads routes
-router.get("/threads", ThreadsController.findAll)
-router.get("/thread/:id", ThreadsController.findByID)
+router.get("/threads", authenticate, ThreadsController.findAll)
+router.get("/thread/:id", authenticate, ThreadsController.findByID)
 router.post("/thread", authenticate, ThreadsController.create)
 router.patch("/thread/:id", authenticate, ThreadsController.update)
 router.delete("/thread/:id", authenticate, ThreadsController.delete)
@@ -40,8 +40,8 @@ router.delete("/thread/:id", authenticate, ThreadsController.delete)
 //likes routes
 
 //replies routes
-router.get("/replies", RepliesController.findAll)
-router.get("/reply/:id", RepliesController.findByID)
+router.get("/replies", authenticate, RepliesController.findAll)
+router.get("/reply/:id", authenticate, RepliesController.findByID)
 router.post("/reply", authenticate, RepliesController.create)
 router.patch("/reply/:id", authenticate, RepliesController.update)
 router.delete("/reply/:id", authenticate, RepliesController.delete)

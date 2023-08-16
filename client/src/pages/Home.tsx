@@ -1,8 +1,8 @@
-import ThreadCardDetail from "../features/thread/components/ThreadCardDetail";
+import ThreadCardDetail from "../features/thread/components/Thread";
 import Replies from "../features/thread/components/Replies";
-import ThreadCard from "../features/thread/components/ThreadCard";
+import ThreadCard from "../features/thread/components/Threads";
 
-export default function Home() {
+export function Home() {
     return (
         <>
         <ThreadCard />
