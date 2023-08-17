@@ -1,7 +1,7 @@
 import { Image, Button, Text, HStack, Divider, Avatar, Stack } from "@chakra-ui/react"
 import { ChatSquareText, Heart, HeartFill } from "react-bootstrap-icons"
 import { Link } from "react-router-dom"
-import { Thread } from "../types/Interfaces";
+import { Thread } from "../../../interfaces/featureInterfaces";
 import { formatDistanceToNow } from "date-fns"
 import React from "react";
 import ErrorMessage from "../../../components/Error";

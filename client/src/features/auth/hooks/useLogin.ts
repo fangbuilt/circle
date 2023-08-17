@@ -1,10 +1,13 @@
 import { useState, ChangeEvent } from "react";
-import { Login } from "../types/Interfaces";
+import { Login } from "../../../interfaces/authInterfaces";
 import { API } from "../../../lib/api";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { AUTH_LOGIN } from "../../../stores/rootReducer";
 
 export function useLogin() {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [form, setForm] = useState<Login>({
     email: "",
     password: ""
@@ -20,8 +23,7 @@ export function useLogin() {
   async function handleLogin() {
     try {
       const response = await API.post("/auth/login", form)
-      localStorage.setItem("token", response.data.token)
-      console.log(response)
+      dispatch(AUTH_LOGIN(response.data))
       navigate("/")
     } catch (error) {
       console.log(error)

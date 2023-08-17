@@ -5,8 +5,8 @@ export interface User {
     email: string,
     avatar?: string,
     bio?: string,
-    created_at: string,
-    updated_at: string,
+    created_at?: string,
+    updated_at?: string,
     threads?: Thread[],
     replies?: Reply[]
 }

@@ -1,0 +1,24 @@
+const [isLoading, setIsLoading] = useState<boolean>(true)
+  const navigate = useNavigate()
+
+  async function checkAuth() {
+    try {
+      setAuthToken(localStorage.token)
+      const response = await API.get("/auth/check")
+      console.log(response)
+      setIsLoading(false)
+    } catch (error) {
+      localStorage.removeItem("token")
+      setIsLoading(false)
+      navigate("/auth/login")
+      console.log("Authentication error", error)
+    }
+  }
+
+  useEffect(() => {
+    if (localStorage.token) {
+      checkAuth()
+    } else {
+      setIsLoading(false)
+    }
+  }, [])

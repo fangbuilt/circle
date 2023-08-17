@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
 import { API } from "../../../lib/api"
 import { useQuery } from "@tanstack/react-query"
-import { Thread } from "../types/Interfaces"
+import { Thread } from "../../../interfaces/featureInterfaces"
 
 export default function useGetThread() {
  const { id } = useParams()

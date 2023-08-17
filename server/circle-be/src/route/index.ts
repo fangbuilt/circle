@@ -28,7 +28,7 @@ router.delete("/user/:id", UsersController.delete)
 //auth routes
 router.post("/auth/register", AuthController.register)
 router.post("/auth/login", AuthController.login)
-router.get("/check-auth", authenticate, AuthController.checkAuth)
+router.get("/auth/check", authenticate, AuthController.checkAuth)
 
 //threads routes
 router.get("/threads", authenticate, ThreadsController.findAll)

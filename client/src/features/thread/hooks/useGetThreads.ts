@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { Thread } from "../types/Interfaces"
+import { Thread } from "../../../interfaces/featureInterfaces"
 import { API } from "../../../lib/api"
 
 export default function useGetThreads() {

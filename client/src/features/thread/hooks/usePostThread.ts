@@ -1,5 +1,5 @@
 import { useState, ChangeEvent } from "react";
-import { ThreadPost } from "../types/Interfaces";
+import { ThreadPost } from "../../../interfaces/featureInterfaces";
 import { API } from "../../../lib/api";
 import { useNavigate } from "react-router-dom";
 

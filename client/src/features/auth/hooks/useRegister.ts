@@ -1,5 +1,5 @@
 import { useState, ChangeEvent } from "react";
-import { Register } from "../types/Interfaces";
+import { Register } from "../../../interfaces/authInterfaces";
 import { API } from "../../../lib/api";
 import { useNavigate } from "react-router-dom";
 

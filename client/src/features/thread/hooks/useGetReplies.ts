@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
 import { API } from "../../../lib/api"
 import { useQuery } from "@tanstack/react-query"
-import { Reply } from "../types/Interfaces"
+import { Reply } from "../../../interfaces/featureInterfaces"
 
 export default function useGetReplies() {
     const { id } = useParams()
