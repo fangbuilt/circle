@@ -1,0 +1,7 @@
+function AuthRoute({ isLogin }: { isLogin: boolean }) {
+  if (isLogin) {
+    return <Outlet />
+  } else {
+    return <Navigate to={"/auth/login"} />
+  }
+}

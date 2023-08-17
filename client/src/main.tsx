@@ -6,16 +6,9 @@ import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import rootReducer from './stores/rootReducer'
 import { configureStore } from "@reduxjs/toolkit"
-// import { initialAuthState } from './stores/slices/authSlice.ts'
 
 const store = configureStore({
   reducer: rootReducer,
-  // preloadedState: {
-  //   auth: {
-  //     ...initialAuthState,
-  //     token: localStorage.getItem("token") || null
-  //   }
-  // }
 })
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

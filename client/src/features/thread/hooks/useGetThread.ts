@@ -4,22 +4,22 @@ import { useQuery } from "@tanstack/react-query"
 import { Thread } from "../../../interfaces/featureInterfaces"
 
 export default function useGetThread() {
- const { id } = useParams()
+  const { id } = useParams()
 
- const fetch = async () => {
-  try {
-   const response = await API.get(`/thread/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.token}`
+  const fetch = async () => {
+    try {
+      const response = await API.get(`/thread/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.token}`
+        }
+      })
+      return response.data
+    } catch (error) {
+      throw new Error("Error while getting this thread datum")
     }
-   })
-   return response.data
-  } catch (error) {
-   throw new Error("Error while getting this thread datum")
   }
- }
 
- const { data, isLoading, isError } = useQuery<Thread>(["thread", id], fetch)
+  const { data, isLoading, isError } = useQuery<Thread>(["thread", id], fetch)
 
- return { data, isLoading, isError }
+  return { data, isLoading, isError }
 }

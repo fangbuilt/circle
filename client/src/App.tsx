@@ -1,46 +1,34 @@
-import { Route, Routes, useNavigate } from "react-router-dom"
-import { Home, ObserveThread } from "./pages/Home"
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Register, Login } from "./pages/Auth"
-import { API, setAuthToken } from "./lib/api"
-import React, { useEffect, useState } from "react"
+import React from "react"
+import { useSelector } from "react-redux"
+import { Navigate, Outlet, Route, Routes } from "react-router-dom"
 import Loading from "./components/Loading"
-import { useDispatch } from "react-redux"
-import { AUTH_CHECK, AUTH_ERROR } from "./stores/rootReducer"
+import { Login, Register } from "./pages/Auth"
+import { Home, ObserveThread } from "./pages/Home"
+import { RootState } from "./stores/types/rootState"
+import useCheckAuth from './hooks/useCheckAuth'
 
 const queryClient = new QueryClient()
 
 function App() {
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const { isLoading } = useCheckAuth()
+  const auth = useSelector((state: RootState) => state.auth)
 
-  async function checkAuth() {
-    try {
-      const response = await API.get("/auth/check")
-      dispatch(AUTH_CHECK(response.data))
-      setIsLoading(false)
-    } catch (error) {
-      dispatch(AUTH_ERROR())
-      setIsLoading(false)
-      navigate("/auth/login")
+  function IsLogin() {
+    if (!auth.email) {
+      return <Navigate to={"/auth/login"} />
+    } else {
+      return <Outlet />
     }
   }
 
-  useEffect(() => {
-    async function handleAuth() {
-      if (localStorage.token) {
-        setAuthToken(localStorage.token)
-        try {
-          await checkAuth()
-        } catch (error) {
-          console.log("goblok")
-        }
-      }
-      setIsLoading(false)
+  function IsNotLogin() {
+    if (auth.email) {
+      return <Navigate to={"/"} />
+    } else {
+      return <Outlet />
     }
-    handleAuth()
-  }, [])
+  }
 
   return (
     <React.Fragment>
@@ -49,10 +37,14 @@ function App() {
       ) : (
         <QueryClientProvider client={queryClient}>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/thread/:id" element={<ObserveThread />} />
-            <Route path="/auth/register" element={<Register />} />
-            <Route path="/auth/login" element={<Login />} />
+            <Route path="/" element={<IsLogin />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/thread/:id" element={<ObserveThread />} />
+            </Route>
+            <Route path="/" element={<IsNotLogin />}>
+              <Route path="/auth/register" element={<Register />} />
+              <Route path="/auth/login" element={<Login />} />
+            </Route>
           </Routes>
         </QueryClientProvider>
       )}

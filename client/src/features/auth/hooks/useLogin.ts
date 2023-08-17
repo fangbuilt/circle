@@ -3,7 +3,7 @@ import { Login } from "../../../interfaces/authInterfaces";
 import { API } from "../../../lib/api";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { AUTH_LOGIN } from "../../../stores/rootReducer";
+import { AUTH_LOGIN, AUTH_LOGOUT } from "../../../stores/rootReducer";
 
 export function useLogin() {
   const navigate = useNavigate()
@@ -26,7 +26,7 @@ export function useLogin() {
       dispatch(AUTH_LOGIN(response.data))
       navigate("/")
     } catch (error) {
-      console.log(error)
+      dispatch(AUTH_LOGOUT())
     }
   }
 
