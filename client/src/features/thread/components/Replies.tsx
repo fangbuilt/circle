@@ -1,5 +1,5 @@
 import { HStack, Image, Text, Button, Divider, Avatar, Stack } from "@chakra-ui/react"
-import { ChatSquareText, Heart, HeartFill } from "react-bootstrap-icons"
+import { Heart, HeartFill } from "react-bootstrap-icons"
 import { Reply } from "../../../interfaces/featureInterfaces"
 import { formatDistanceToNow } from "date-fns"
 import React from "react";
@@ -36,7 +36,7 @@ export default function Replies() {
                 <Stack spacing={4}>
                   <Text>{reply.content}</Text>
                   {reply?.image && (
-                    <Image src={reply?.image} alt="User Attachment" borderRadius='.5rem' w='25rem' maxH='30rem' objectFit='cover' />
+                    <Image src={reply?.image} alt="User Attachment" borderRadius='.5rem' w='30em' h='24em' objectFit='cover' />
                   )}
                 </Stack>
                 <HStack spacing={4} mt={2}>
@@ -45,7 +45,6 @@ export default function Replies() {
                     :
                     <Button variant={"ghost"} leftIcon={<Heart />} textColor={"GrayText"}>{reply.number_of_likes}</Button>
                   }
-                  <Button variant={"ghost"} leftIcon={<ChatSquareText />} textColor={"GrayText"}>Reply</Button>
                 </HStack>
               </Stack>
             </HStack>

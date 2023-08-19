@@ -24,7 +24,7 @@ export default function ThreadCardDetail() {
         <Stack align={"start"} spacing={4} mx={4}>
           <HStack gap={4}>
             <Avatar name={thread.user.full_name} src={thread.user.avatar} />
-            <Stack align={"start"}>
+            <Stack align={"start"} spacing={0}>
               <Text fontWeight={"bold"}>{thread.user.full_name}</Text>
               <Text textColor={"GrayText"}>@{thread.user.username}</Text>
             </Stack>
@@ -33,7 +33,7 @@ export default function ThreadCardDetail() {
             <Stack align={"start"} spacing={4}>
               <Text>{thread.content}</Text>
               {thread.image && (
-                <Image src={thread.image} alt="User Attachment" borderRadius='.5rem' w='25rem' maxH='30rem' objectFit='cover' />
+                <Image src={thread.image} alt="User Attachment" borderRadius='.5rem' w='40rem' h='30rem' objectFit='cover' />
               )}
             </Stack>
             <HStack mt={4}>

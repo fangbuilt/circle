@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 import { Thread } from "./ThreadsEntity"
 import { User } from "./UsersEntity"
 
@@ -7,10 +7,10 @@ export class Reply {
     @PrimaryGeneratedColumn()
     id: number
 
-    @ManyToOne(() => Thread, (thread) => thread.replies)
+    @ManyToOne(() => Thread, (thread) => thread.replies, {onDelete: "CASCADE", onUpdate: "CASCADE"})
     thread: Thread
 
-    @ManyToOne(() => User, (user) => user.replies)
+    @ManyToOne(() => User, (user) => user.replies, {onDelete: "CASCADE", onUpdate: "CASCADE"})
     user: User
 
     @Column()

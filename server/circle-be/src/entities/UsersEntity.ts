@@ -26,10 +26,10 @@ export class User {
     @Column({ nullable: true })
     bio: string
 
-    @OneToMany(() => Thread, (threads) => threads.user)
+    @OneToMany(() => Thread, (threads) => threads.user, {onDelete: "CASCADE", onUpdate: "CASCADE"})
     threads: Thread[]
 
-    @OneToMany(() => Reply, (replies) => replies.user)
+    @OneToMany(() => Reply, (replies) => replies.user, {onDelete: "CASCADE", onUpdate: "CASCADE"})
     replies: Reply[]
 
     @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })

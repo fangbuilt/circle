@@ -5,6 +5,7 @@ import UsersController from "../controllers/UsersController"
 import RepliesController from "../controllers/RepliesController"
 import AuthController from "../controllers/AuthController"
 import authenticate from "../middlewares/Auth"
+import { upload } from "../middlewares/FileUpload"
 
 const router = express.Router()
 

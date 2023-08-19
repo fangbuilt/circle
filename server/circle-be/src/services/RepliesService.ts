@@ -17,7 +17,10 @@ class RepliesService {
             if (thread_id) {
                 const findAllRepliesByThread = await this.replyRepository.find({
                     where: { thread: { id: thread_id } },
-                    relations: ["thread", "user"]
+                    relations: ["thread", "user"],
+                    order: {
+                        id: "DESC"
+                    }
                 })
                 if (!findAllRepliesByThread) {
                     return res.status(404).json({ Message: `No replies available for thread id ${thread_id}` })

@@ -22,10 +22,10 @@ export class Thread {
     @Column({ nullable: true })
     number_of_likes: number
 
-    @OneToMany(() => Reply, (replies) => replies.thread)
+    @OneToMany(() => Reply, (replies) => replies.thread, {onDelete: "CASCADE", onUpdate: "CASCADE"})
     replies: Reply[]
 
-    @ManyToOne(() => User, (user) => user.threads)
+    @ManyToOne(() => User, (user) => user.threads, {onDelete: "CASCADE", onUpdate: "CASCADE"})
     user: User
 
     @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })

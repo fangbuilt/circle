@@ -28,7 +28,7 @@ const [isLoading, setIsLoading] = useState<boolean>(true)
         try {
           await checkAuth()
         } catch (error) {
-          console.log("goblok")
+          console.log({ error })
         }
       }
       setIsLoading(false)
