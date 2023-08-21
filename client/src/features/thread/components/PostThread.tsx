@@ -42,7 +42,7 @@ export default function PostThread() {
             pt={"2.25em"}
           >
           </Textarea>
-          <Input type="file" display={"none"} onChange={handleChange} ref={inputRef} />
+          <Input type="file" accept="image/jpeg, image/png, image/gif" display={"none"} onChange={handleChange} ref={inputRef} />
           <Button onClick={handleClick}><Image /></Button>
           <Button borderRadius={"full"} px={6} bgColor={"circleGreen"}>Post</Button>
         </form>
