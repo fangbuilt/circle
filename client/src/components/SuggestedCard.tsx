@@ -2,7 +2,7 @@ import { Avatar, Button, Flex, HStack, Heading, Stack, Text } from "@chakra-ui/r
 
 export default function SuggestedCard() {
   return (
-    <Flex direction={"column"} backgroundColor={"whiteAlpha.100"} borderRadius={"md"} p={4} gap={4}>
+    <Flex direction={"column"} bgColor={"circleAccent"} borderRadius={"md"} p={4} gap={4}>
       <Heading size={"sm"}>Suggested for you</Heading>
       <Stack>
         <Flex justify={"space-between"} align={"center"}>

@@ -10,10 +10,17 @@ interface LayoutProps {
   children: ReactNode
 }
 
-export function Layout({ children }: LayoutProps) {
+export function CommonLayout({ children }: LayoutProps) {
   return (
     <Flex justify={"center"} minHeight={"100vh"}>
-      <Box position={"sticky"} top={0} height={"100vh"} width={"17.5%"} borderRight={"1px"} borderRightColor={"gray.700"}>
+      <Box
+        position={"sticky"}
+        top={0}
+        height={"100vh"}
+        width={"20%"}
+        borderRight={"1px"}
+        borderRightColor={"circleAccent"}
+      >
         <SideBar />
       </Box>
       <Box width={"50%"}>
@@ -22,15 +29,49 @@ export function Layout({ children }: LayoutProps) {
       <Stack
         position={"sticky"}
         top={0} height={"100vh"}
-        width={"32.5%"}
+        width={"30%"}
         borderLeft={"1px"}
-        borderLeftColor={"gray.700"}
+        borderLeftColor={"circleAccent"}
         p={4}
         spacing={3}
         overflowY={"scroll"}
         className="hiddenScrollBar"
       >
         <ProfileCard />
+        <SuggestedCard />
+        <FlexingIsland />
+      </Stack>
+    </Flex>
+  )
+}
+
+export function ProfileLayout({ children }: LayoutProps) {
+  return (
+    <Flex justify={"center"} minHeight={"100vh"}>
+      <Box
+        position={"sticky"}
+        top={0}
+        height={"100vh"}
+        width={"20%"}
+        borderRight={"1px"}
+        borderRightColor={"circleAccent"}
+      >
+        <SideBar />
+      </Box>
+      <Box width={"50%"}>
+        {children}
+      </Box>
+      <Stack
+        position={"sticky"}
+        top={0} height={"100vh"}
+        width={"30%"}
+        borderLeft={"1px"}
+        borderLeftColor={"circleAccent"}
+        p={4}
+        spacing={3}
+        overflowY={"scroll"}
+        className="hiddenScrollBar"
+      >
         <SuggestedCard />
         <FlexingIsland />
       </Stack>

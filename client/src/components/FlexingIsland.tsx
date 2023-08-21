@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export default function FlexingIsland() {
   return (
-    <Box backgroundColor={"whiteAlpha.100"} borderRadius={"md"} p={4}>
+    <Box bgColor={"circleAccent"} borderRadius={"md"} p={4}>
       <HStack>
         <HStack spacing={1}>
           <Text fontSize={"sm"}>Developed by</Text>

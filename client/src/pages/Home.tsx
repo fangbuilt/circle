@@ -1,36 +1,40 @@
 import ThreadCardDetail from "../features/thread/components/Thread";
-import Replies from "../features/thread/components/Replies";
+import Replies from "../features/reply/components/Replies";
 import ThreadCard from "../features/thread/components/Threads";
 import PostThread from "../features/thread/components/PostThread";
-import { Divider, Flex, Heading } from "@chakra-ui/react";
-import { Layout } from "../layouts/Layout";
+import { Box, Divider, Flex, Heading } from "@chakra-ui/react";
+import { CommonLayout } from "../layouts/Layout";
 import { ArrowLeft } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 
 export function Home() {
     return (
-        <Layout>
-            <Heading size={"md"} p={4}>Home</Heading>
-            <Divider />
+        <CommonLayout>
+            <Box position={"sticky"} top={0} backgroundColor={"circleDark"} zIndex={1}>
+                <Heading size={"md"} p={4}>Home</Heading>
+                <Divider borderColor={"circleAccent"} />
+            </Box>
             <PostThread />
             <ThreadCard />
-        </Layout>
+        </CommonLayout>
     )
 }
 
 export function ObserveThread() {
     const navigate = useNavigate()
     return (
-        <Layout>
-            <Flex alignItems={"center"} p={4} gap={4}>
-                <Heading size={"md"} onClick={() => navigate(-1)} cursor={"pointer"}>
-                    <ArrowLeft />
-                </Heading>
-                <Heading size={"md"}>A Circle's thread</Heading>
-            </Flex>
-            <Divider />
+        <CommonLayout>
+            <Box position={"sticky"} top={0} backgroundColor={"circleDark"} zIndex={1}>
+                <Flex alignItems={"center"} p={4} gap={4}>
+                    <Heading size={"md"} onClick={() => navigate(-1)} cursor={"pointer"}>
+                        <ArrowLeft />
+                    </Heading>
+                    <Heading size={"md"}>A Circle's thread</Heading>
+                </Flex>
+                <Divider borderColor={"circleAccent"} />
+            </Box>
             <ThreadCardDetail />
             <Replies />
-        </Layout>
+        </CommonLayout>
     )
 }

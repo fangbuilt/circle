@@ -1,8 +1,11 @@
 import { Avatar, Button, Flex, HStack, Heading, Image, Stack, Text } from "@chakra-ui/react";
+import { useSelector } from "react-redux";
+import { RootState } from "../stores/types/rootState";
 
 export default function ProfileCard() {
+  const current = useSelector((state: RootState) => state.auth)
   return (
-    <Flex direction={"column"} backgroundColor={"whiteAlpha.100"} borderRadius={"md"} p={4} gap={3}>
+    <Flex direction={"column"} bgColor={"circleAccent"} borderRadius={"md"} p={4} gap={3}>
       <Heading size={"sm"}>My Profile</Heading>
       <Image
         src="https://img.freepik.com/free-vector/gradient-background-green-tones_23-2148374530.jpg"
@@ -12,7 +15,17 @@ export default function ProfileCard() {
         borderRadius={"md"}
         position={"relative"}
       />
-      <Avatar size={"lg"} position={"absolute"} top={"4em"} left={"2em"} />
+      <Avatar
+        size={"xl"}
+        position={"absolute"}
+        top={"2.25em"}
+        left={"1em"}
+        src={current?.avatar}
+        name={current.full_name}
+        showBorder
+        borderWidth={"5px"}
+        borderColor={"circleAccent"}
+      />
       <Button
         variant={"outline"}
         size={"sm"}
@@ -23,18 +36,18 @@ export default function ProfileCard() {
         Edit Profile
       </Button>
       <Stack spacing={0}>
-        <Heading size={"md"}>Seo Soojin</Heading>
-        <Text fontSize={"sm"} textColor={"GrayText"}>@_seosootang</Text>
-        <Text isTruncated>Formerly the captivating dancer from (G)I-DLE</Text>
+        <Heading size={"md"}>{current.full_name}</Heading>
+        <Text fontSize={"sm"} textColor={"GrayText"}>@{current.username}</Text>
+        <Text isTruncated>{current.bio ? current.bio : "~no bio yet"}</Text>
       </Stack>
       <HStack spacing={3}>
         <HStack spacing={1}>
-          <Text fontWeight={"medium"}>6</Text>
-          <Text textColor={"GrayText"}>Following</Text>
+          <Text fontWeight={"semibold"}>2.7m</Text>
+          <Text textColor={"GrayText"}>Followers</Text>
         </HStack>
         <HStack spacing={1}>
-          <Text fontWeight={"medium"}>2.7m</Text>
-          <Text textColor={"GrayText"}>Followers</Text>
+          <Text fontWeight={"semibold"}>7</Text>
+          <Text textColor={"GrayText"}>Following</Text>
         </HStack>
       </HStack>
     </Flex>

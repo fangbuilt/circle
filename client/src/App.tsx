@@ -7,6 +7,9 @@ import { Login, Register } from "./pages/Auth"
 import { Home, ObserveThread } from "./pages/Home"
 import { RootState } from "./stores/types/rootState"
 import useCheckAuth from './hooks/useCheckAuth'
+import { Search } from './pages/Search'
+import { MyCircle } from './pages/MyCircle'
+import { Profile } from './pages/Profile'
 
 const queryClient = new QueryClient()
 
@@ -40,6 +43,9 @@ function App() {
             <Route path="/" element={<IsLogin />}>
               <Route path="/" element={<Home />} />
               <Route path="/thread/:id" element={<ObserveThread />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/my-circle" element={<MyCircle />} />
+              <Route path="/profile" element={<Profile />} />
             </Route>
             <Route path="/" element={<IsNotLogin />}>
               <Route path="/auth/register" element={<Register />} />

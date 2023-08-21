@@ -6,10 +6,12 @@ const initialAuthState: User = {
   id: 0,
   full_name: "",
   username: "",
-  email: ""
+  email: "",
+  avatar: "",
+  bio: ""
 }
 
-export const authSlice = createSlice ({
+export const authSlice = createSlice({
   name: "auth",
   initialState: initialAuthState,
   reducers: {
@@ -21,7 +23,9 @@ export const authSlice = createSlice ({
         id: payload.id,
         full_name: payload.full_name,
         username: payload.username,
-        email: payload.email
+        email: payload.email,
+        avatar: payload.avatar,
+        bio: payload.bio
       }
       return current
     },
@@ -41,6 +45,7 @@ export const authSlice = createSlice ({
     },
     AUTH_LOGOUT: () => {
       localStorage.removeItem("token")
+      return initialAuthState
     },
 
   }

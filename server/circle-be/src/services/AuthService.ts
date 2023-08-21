@@ -31,7 +31,14 @@ class AuthService {
             if (compareEmail > 0) {
                 return res.status(400).json({ Message: "Registered email" })
             }
-
+            const compareUsername = await this.authRepository.count({
+                where: {
+                    username: username
+                }
+            })
+            if (compareUsername > 0) {
+                return res.status(400).json({ Message: "Occupied username" })
+            }
             const hashedPassword = await bcrypt.hash(password, 10)
             const register = this.authRepository.create({
                 username,
@@ -57,9 +64,9 @@ class AuthService {
         } = value
         try {
 
-            const findAccount = await this.authRepository.findOne({ 
-                where: { email }, 
-                select: ["id", "username", "full_name", "email", "password", "avatar"] 
+            const findAccount = await this.authRepository.findOne({
+                where: { email },
+                select: ["id", "username", "full_name", "email", "password", "avatar", "bio"]
             })
             if (!findAccount) {
                 return res.status(404).json({ Message: "Wrong credentials" })
@@ -72,9 +79,10 @@ class AuthService {
             const loginResponse = {
                 account_id: findAccount.id,
                 username: findAccount.username,
-                name: findAccount.full_name,
+                full_name: findAccount.full_name,
                 email: findAccount.email,
                 avatar: findAccount.avatar,
+                bio: findAccount.bio,
                 token: token
             }
             return res.status(200).json({ ...loginResponse })

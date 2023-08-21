@@ -1,6 +1,8 @@
 import { Avatar, Button, Divider, HStack, Input, Textarea } from "@chakra-ui/react";
 import React, { useRef } from "react";
 import { Image } from "react-bootstrap-icons";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../stores/types/rootState";
 
 export default function PostThread() {
   const inputRef = useRef<HTMLInputElement | null>(null)
@@ -17,10 +19,12 @@ export default function PostThread() {
     event.target.value = ""
   }
 
+  const current = useSelector((state: RootState) => state.auth)
+
   return (
     <React.Fragment>
       <HStack p={4} spacing={3}>
-        <Avatar />
+        <Avatar src={current?.avatar} name={current.full_name} />
         <form encType="multipart/form-data"
           style={{
             display: "flex",
@@ -30,20 +34,20 @@ export default function PostThread() {
           }}>
           <Textarea
             placeholder="What's on your mind?"
-            _placeholder={{ fontSize: "xl" }}
+            _placeholder={{ fontSize: "large" }}
             resize={"none"}
             variant={"unstyled"}
-            focusBorderColor="gray.700"
+            focusBorderColor="circleDark"
             height={"100px"}
             pt={"2.25em"}
           >
           </Textarea>
           <Input type="file" display={"none"} onChange={handleChange} ref={inputRef} />
           <Button onClick={handleClick}><Image /></Button>
-          <Button borderRadius={"full"} px={6} colorScheme="green">Post</Button>
+          <Button borderRadius={"full"} px={6} bgColor={"circleGreen"}>Post</Button>
         </form>
       </HStack>
-      <Divider />
+      <Divider borderColor={"circleAccent"} />
     </React.Fragment>
   )
 }
