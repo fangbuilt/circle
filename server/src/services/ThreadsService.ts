@@ -67,7 +67,7 @@ class ThreadsService {
         }
     }
 
-    //create data now handle by queue and worker
+    //create data now handled by queue and worker
     
     //update data
     async update(req: Request, res: Response): Promise<Response> {

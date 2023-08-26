@@ -55,36 +55,7 @@ class RepliesService {
         }
     }
 
-    //create data
-    async create(req: Request, res: Response): Promise<Response> {
-        const { error, value } = CreateReplySchema.validate(req.body)
-        if (error) {
-            return res.status(422).json({ Message: error })
-        }
-        const { thread, user, content, image } = value
-        try {
-            const threadRepository = AppDataSource.getRepository(Thread)
-            const checkThreadID = await threadRepository.findOne({ where: { id: thread.id } })
-            if (!checkThreadID) {
-                return res.status(404).json({ Message: `Can not find the main thread id of ${thread.id} to this reply` })
-            }
-            const userRepository = AppDataSource.getRepository(User)
-            const checkUserID = await userRepository.findOne({ where: { id: user.id } })
-            if (!checkUserID) {
-                return res.status(404).json({ Message: `User with id number ${user.id} is not available"` })
-            }
-            const newReply = this.replyRepository.create({
-                thread: { id: thread.id },
-                user: { id: user.id },
-                content,
-                image
-            })
-            const saveNewReply = await this.replyRepository.save(newReply)
-            return res.status(201).json(saveNewReply)
-        } catch (error) {
-            return res.status(500).json({ Message: "Error while creating this new reply" })
-        }
-    }
+    //create data now handled by queue and worker
 
     async update(req: Request, res: Response): Promise<Response> {
         const id = parseInt(req.params.id)
