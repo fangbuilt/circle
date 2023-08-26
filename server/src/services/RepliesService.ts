@@ -4,7 +4,7 @@ import { AppDataSource } from "../data-source";
 import { Request, Response } from "express";
 import { Thread } from "../entities/ThreadsEntity";
 import { User } from "../entities/UsersEntity";
-import { CreateReplySchema, UpdateReplySchema } from "../libs/validator/RepliesValidator";
+import { CreateReplySchema, UpdateReplySchema } from "../validator/RepliesValidator";
 
 class RepliesService {
     private readonly replyRepository: Repository<Reply> =

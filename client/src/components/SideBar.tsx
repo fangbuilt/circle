@@ -1,8 +1,9 @@
 import { Box, Button, Flex, Image, Stack } from "@chakra-ui/react";
-import { ArrowBarLeft, Circle, CircleFill, House, HouseFill, Person, PersonFill, PlusCircleDotted, Search } from "react-bootstrap-icons";
-import CircleLogo from "../../public/circle-logo.svg";
+import { ArrowBarLeft, Circle, CircleFill, House, HouseFill, Person, PersonFill, Search } from "react-bootstrap-icons";
+import CircleLogo from "../assets/circle-logo.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import useLogout from "../hooks/useLogout";
+import PostThreadModal from "../features/thread/components/PostThreadModal";
 
 export default function SideBar() {
   const navigate = useNavigate()
@@ -46,14 +47,7 @@ export default function SideBar() {
         >
           Profile
         </Button>
-        <Button
-          mt={5}
-          bgColor={"circleGreen"}
-          borderRadius={"full"}
-          leftIcon={<PlusCircleDotted />}
-        >
-          New Thread
-        </Button>
+        <PostThreadModal />
       </Stack>
       <Box px={5} mb={10} position={"absolute"} bottom={0}>
         <Button

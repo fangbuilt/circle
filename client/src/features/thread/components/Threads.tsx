@@ -21,6 +21,7 @@ export default function ThreadCard() {
       <ErrorMessage />
     )
   }
+  console.log(data)
   return (
     <Stack py={4} spacing={4}>
       {data && (
@@ -39,7 +40,7 @@ export default function ThreadCard() {
                   <Link to={`/thread/${thread.id}`}>
                     <Text>{thread.content}</Text>
                   </Link>
-                  {thread?.image && (
+                  {thread.image && (
                     <Image src={thread.image} alt="User Attachment" borderRadius='.5rem' w='30em' h='24em' objectFit='cover' />
                   )}
                 </Stack>

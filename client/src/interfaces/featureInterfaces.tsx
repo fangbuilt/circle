@@ -14,7 +14,7 @@ export interface User {
 export interface Thread {
     id: number,
     content: string,
-    image: string,
+    image?: string ,
     is_liked: boolean,
     number_of_likes: number,
     created_at: string
@@ -24,7 +24,7 @@ export interface Thread {
 
 export interface ThreadPost {
     content: string,
-    image?: string,
+    image?: MediaSource | Blob | string
 }
 
 export interface Reply {

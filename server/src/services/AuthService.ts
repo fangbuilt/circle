@@ -2,7 +2,7 @@ import { Repository } from "typeorm"
 import { User } from "../entities/UsersEntity"
 import { AppDataSource } from "../data-source"
 import { Request, Response } from "express"
-import { LoginSchema, RegisterSchema } from "../libs/validator/AuthValidator"
+import { LoginSchema, RegisterSchema } from "../validator/AuthValidator"
 import * as bcrypt from "bcrypt"
 import * as jwt from "jsonwebtoken"
 
@@ -66,8 +66,7 @@ class AuthService {
 
             const findAccount = await this.authRepository.findOne({
                 where: { email },
-                select: ["id", "username", "full_name", "email", "password", "avatar", "bio"],
-                relations: ["thread"]
+                select: ["id", "username", "full_name", "email", "password", "avatar", "bio"]
             })
             if (!findAccount) {
                 return res.status(404).json({ Message: "Wrong credentials" })

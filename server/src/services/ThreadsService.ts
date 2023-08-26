@@ -2,8 +2,8 @@ import { Request, Response } from "express"
 import { Repository } from "typeorm";
 import { Thread } from "../entities/ThreadsEntity";
 import { AppDataSource } from "../data-source";
-import { User } from "../entities/UsersEntity";
-import { CreateThreadSchema, UpdateThreadSchema } from "../libs/validator/ThreadsValidator";
+import { CreateThreadSchema, UpdateThreadSchema } from "../validator/ThreadsValidator";
+import { v2 as cloudinary } from "cloudinary"
 
 class ThreadsService {
     private readonly threadRepository: Repository<Thread> =
@@ -21,6 +21,9 @@ class ThreadsService {
                         id: "DESC"
                     }
                 })
+                limitFindThreads.forEach((Thread) => {
+                    Thread.image = Thread.image && `${Thread.image}`
+                })
                 if (!limitFindThreads) {
                     return res.status(404).json({ error: "No threads available" })
                 }
@@ -31,6 +34,9 @@ class ThreadsService {
                     order: {
                         id: "DESC"
                     }
+                })
+                findThreads.forEach((Thread) => {
+                    Thread.image = Thread.image && `${Thread.image}`
                 })
                 if (!findThreads) {
                     return res.status(404).json({ error: "No threads available" })
@@ -50,6 +56,7 @@ class ThreadsService {
                 where: { id: id },
                 relations: ["user", "replies"]
             })
+            findAThread.image = findAThread.image && `${findAThread.image}`
             if (!findAThread) {
                 return res.status(404).json({ error: "Thread not found" })
             }
@@ -67,30 +74,21 @@ class ThreadsService {
             return res.status(422).json({ error: error })
         }
         const filename = res.locals.filename
-
-        console.log("1", filename)
-
         const { content } = value
-
-        console.log("2", value)
-
+        const loginSession = res.locals.loginSession
+        cloudinary.config({
+            cloud_name: process.env.CLOUD_NAME,
+            api_key: process.env.API_KEY,
+            api_secret: process.env.API_SECRET
+        }) // const cloudConfig
+        await cloudinary.uploader.upload(`./uploads/${filename}`) //const CloudRes
         try {
-            const loginSession = res.locals.loginSession
-
-            console.log("3", loginSession)
-
             const newThread = this.threadRepository.create({
                 content,
-                image : filename,
+                image: filename,
                 user: { id: loginSession.findAccount.id }
             })
-
-            console.log("4", newThread)
-
             const saveNewthread = await this.threadRepository.save(newThread)
-
-            console.log("5", saveNewthread)
-
             return res.status(201).json(saveNewthread)
         } catch (error) {
             return res.status(500).json({ error: error })

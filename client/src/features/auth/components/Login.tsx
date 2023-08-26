@@ -1,7 +1,7 @@
 import { Button, FormControl, Heading, Input, Link as ChakraLink, Stack, Text, StackDivider, Divider, Flex, Image, Box } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { useLogin } from "../hooks/useLogin";
-import CircleLogo from "../../../../public/circle-logo.svg"
+import CircleLogo from "../../../assets/circle-logo.svg"
 
 export default function LoginForm() {
   const { handleChange, handleLogin } = useLogin()

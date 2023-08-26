@@ -6,6 +6,8 @@ import RepliesController from "../controllers/RepliesController"
 import AuthController from "../controllers/AuthController"
 import authenticate from "../middlewares/Auth"
 import { upload } from "../middlewares/FileUpload"
+import QueueController from "../queues/ThreadQueue"
+import ThreadQueue from "../queues/ThreadQueue"
 
 const router = express.Router()
 
@@ -34,7 +36,7 @@ router.get("/auth/check", authenticate, AuthController.checkAuth)
 //threads routes
 router.get("/threads", authenticate, ThreadsController.findAll)
 router.get("/thread/:id", authenticate, ThreadsController.findByID)
-router.post("/thread", authenticate, upload("image"), ThreadsController.create)
+router.post("/thread", authenticate, upload("image"), ThreadQueue.create)
 router.patch("/thread/:id", authenticate, ThreadsController.update)
 router.delete("/thread/:id", authenticate, ThreadsController.delete)
 
