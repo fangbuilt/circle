@@ -3,7 +3,6 @@ import * as amqp from "amqplib"
 import { UploadApiResponse, v2 as cloudinary } from "cloudinary";
 import { AppDataSource } from "../data-source";
 import "dotenv/config"
-import { cloudConfig } from "../libs/Cloudinary";
 
 class ThreadWorker {
   async create(queueName: string, connection: amqp.Connection) {
@@ -28,12 +27,12 @@ class ThreadWorker {
             console.log("New thread posted")
             channel.ack(message)
           } catch (error) {
-            console.log({ error })
+            console.log({ error: error })
           }
         }
       })
     } catch (error) {
-      console.log({ error })
+      console.log({ error: error })
     }
   }
 }

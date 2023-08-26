@@ -1,11 +1,11 @@
-import { Avatar, Button, Divider, HStack, Input, Textarea, Image, Box } from "@chakra-ui/react";
+import { Avatar, Box, Button, Divider, HStack, Image, Input, Textarea } from "@chakra-ui/react";
 import React from "react";
 import { Image as ImageIcon, X } from "react-bootstrap-icons";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../stores/types/rootState";
-import usePostThread from "../hooks/usePostThread";
+import usePostReply from "../hooks/usePostReply";
 
-export default function PostThread() {
+export default function PostReply() {
   const current = useSelector((state: RootState) => state.auth)
 
   const {
@@ -16,7 +16,7 @@ export default function PostThread() {
     loading,
     preview,
     cancelPreview
-  } = usePostThread()
+  } = usePostReply()
 
   return (
     <React.Fragment>
@@ -33,7 +33,7 @@ export default function PostThread() {
           }}
         >
           <Textarea
-            placeholder={`What's on your mind, ${current.full_name.split(" ")[0]}?`}
+            placeholder={`Post a reply as ${current.full_name.split(" ")[0]}`}
             _placeholder={{ fontSize: "large" }}
             resize={"none"}
             variant={"unstyled"}
@@ -60,7 +60,7 @@ export default function PostThread() {
             isLoading={loading}
             loadingText="Posting..."
           >
-            Post
+            Reply
           </Button>
         </form>
       </HStack>

@@ -8,6 +8,7 @@ import authenticate from "../middlewares/Auth"
 import { upload } from "../middlewares/FileUpload"
 import QueueController from "../queues/ThreadQueue"
 import ThreadQueue from "../queues/ThreadQueue"
+import ReplyQueue from "../queues/ReplyQueue"
 
 const router = express.Router()
 
@@ -45,7 +46,7 @@ router.delete("/thread/:id", authenticate, ThreadsController.delete)
 //replies routes
 router.get("/replies", authenticate, RepliesController.findAll)
 router.get("/reply/:id", authenticate, RepliesController.findByID)
-router.post("/reply", authenticate, RepliesController.create)
+router.post("/reply", authenticate, upload("image"), ReplyQueue.create)
 router.patch("/reply/:id", authenticate, RepliesController.update)
 router.delete("/reply/:id", authenticate, RepliesController.delete)
 

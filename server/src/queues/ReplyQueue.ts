@@ -1,26 +1,31 @@
 import { Request, Response } from "express";
+import { CreateReplySchema } from "../validator/RepliesValidator";
 import { enqueue } from "../libs/RabbitMQ";
-import { CreateThreadSchema } from "../validator/ThreadsValidator";
 
-class ThreadQueue {
+class ReplyQueue {
   async create(req: Request, res: Response) {
     try {
-      const queueName = "threadQueue"
+      const queueName = "replyQueue"
 
       const filename = res.locals.filename
 
       const data = {
+        thread_id: req.body.thread_id,
         content: req.body.content,
         image: filename
       }
 
-      const { error } = CreateThreadSchema.validate(data)
+      const { error } = CreateReplySchema.validate(data)
       if (error) {
         return res.status(422).json({ error: error })
       }
+
       const loginSession = res.locals.loginSession
 
+      const relatedThread = res.locals.relatedThread
+
       const payload = {
+        thread_id: data.thread_id,
         content: data.content,
         image: data.image,
         user_id: loginSession.findAccount.id
@@ -31,11 +36,11 @@ class ThreadQueue {
         return res.status(500).json({ error: queueError })
       }
 
-      return res.status(201).json({ Message: "New thread is queued: ", data: payload })
+      return res.status(201).json({ Message: "New reply is queued: ", data: payload })
     } catch (error) {
       return res.status(500).json({ error: "Internal server error" })
     }
   }
 }
 
-export default new ThreadQueue()
+export default new ReplyQueue()

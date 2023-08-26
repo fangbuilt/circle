@@ -8,9 +8,6 @@ class ThreadsController {
     findByID(req: Request, res: Response) {
         ThreadsService.findByID(req, res)
     }
-    create(req: Request, res: Response) {
-        ThreadsService.create(req, res)
-    }
     update(req: Request, res: Response) {
         ThreadsService.update(req, res)
     }

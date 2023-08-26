@@ -37,3 +37,9 @@ export interface Reply {
     thread: Thread,
     user: User,
 }
+
+export interface ReplyPost {
+    content: string,
+    image?: MediaSource | Blob | string,
+    thread_id?: number
+}

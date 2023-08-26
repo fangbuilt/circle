@@ -54,7 +54,7 @@ export default function ThreadCardDetail() {
           </Stack>
         </Stack>
       )}
-      <Divider />
+      <Divider borderColor={"circleAccent"} />
     </Stack>
   )
 }

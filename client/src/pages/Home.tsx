@@ -6,6 +6,7 @@ import { Box, Divider, Flex, Heading } from "@chakra-ui/react";
 import { CommonLayout } from "../layouts/Layout";
 import { ArrowLeft } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
+import PostReply from "../features/reply/components/PostReply";
 
 export function Home() {
     return (
@@ -34,6 +35,7 @@ export function ObserveThread() {
                 <Divider borderColor={"circleAccent"} />
             </Box>
             <ThreadCardDetail />
+            <PostReply />
             <Replies />
         </CommonLayout>
     )

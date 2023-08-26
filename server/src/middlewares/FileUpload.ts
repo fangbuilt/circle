@@ -9,7 +9,7 @@ export const upload = (fieldname: string) => {
     filename: function (req, file, callback) {
       const suffix = Date.now()
       const extension = file.originalname.split(".")[1]
-      callback(null, file.fieldname + "-" + suffix + extension)
+      callback(null, file.fieldname + "-" + suffix + "." + extension)
     }
   })
   const uploadFile = multer({ storage: storage })

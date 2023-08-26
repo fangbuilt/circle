@@ -67,34 +67,8 @@ class ThreadsService {
         }
     }
 
-    //create data
-    async create(req: Request, res: Response): Promise<Response> {
-        const { error, value } = CreateThreadSchema.validate(req.body)
-        if (error) {
-            return res.status(422).json({ error: error })
-        }
-        const filename = res.locals.filename
-        const { content } = value
-        const loginSession = res.locals.loginSession
-        cloudinary.config({
-            cloud_name: process.env.CLOUD_NAME,
-            api_key: process.env.API_KEY,
-            api_secret: process.env.API_SECRET
-        }) // const cloudConfig
-        await cloudinary.uploader.upload(`./uploads/${filename}`) //const CloudRes
-        try {
-            const newThread = this.threadRepository.create({
-                content,
-                image: filename,
-                user: { id: loginSession.findAccount.id }
-            })
-            const saveNewthread = await this.threadRepository.save(newThread)
-            return res.status(201).json(saveNewthread)
-        } catch (error) {
-            return res.status(500).json({ error: error })
-        }
-    }
-
+    //create data now handle by queue and worker
+    
     //update data
     async update(req: Request, res: Response): Promise<Response> {
         const id = parseInt(req.params.id)

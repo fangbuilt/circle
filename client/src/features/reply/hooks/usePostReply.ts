@@ -1,12 +1,12 @@
-import { useState, ChangeEvent, FormEvent } from "react";
-import { ThreadPost } from "../../../interfaces/featureInterfaces";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
+import { ReplyPost } from "../../../interfaces/featureInterfaces";
 import { API, setAuthToken } from "../../../lib/api";
-import { useNavigate } from "react-router-dom";
-import { useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function usePostThread() {
+export default function usePostReply() {
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
+  const { id } = useParams()
 
   const handleClick = () => {
     if (inputRef.current) {
@@ -16,9 +16,10 @@ export default function usePostThread() {
 
   const navigate = useNavigate()
 
-  const [form, setForm] = useState<ThreadPost>({
+  const [form, setForm] = useState<ReplyPost>({
     content: "",
-    image: ""
+    image: "",
+    thread_id: +(id as string)
   })
 
   function handleChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -58,10 +59,12 @@ export default function usePostThread() {
       const formData = new FormData()
       formData.append("content", form.content)
       formData.append("image", form.image as File)
+      formData.append("thread_id", String(id))
+      console.log(formData);
       setAuthToken(localStorage.token)
-      await API.post("/thread", formData)
+      await API.post("/reply", formData)
       setLoading(false)
-      navigate("/")
+      navigate(`/thread/${id}`)
     } catch (error) {
       console.log({ error: error })
       setLoading(false)
@@ -77,4 +80,5 @@ export default function usePostThread() {
     preview,
     cancelPreview
   }
+
 }
