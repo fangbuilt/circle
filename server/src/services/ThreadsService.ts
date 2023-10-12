@@ -16,7 +16,7 @@ class ThreadsService {
             if (limit) {
                 const limitFindThreads = await this.threadRepository.find({
                     take: limit,
-                    relations: ["user", "replies"],
+                    relations: ["user", "replies", "likes.user"],
                     order: {
                         id: "DESC"
                     }
@@ -30,7 +30,7 @@ class ThreadsService {
                 return res.status(200).json(limitFindThreads)
             } else {
                 const findThreads = await this.threadRepository.find({
-                    relations: ["user", "replies"],
+                    relations: ["user", "replies", "likes.user"],
                     order: {
                         id: "DESC"
                     }

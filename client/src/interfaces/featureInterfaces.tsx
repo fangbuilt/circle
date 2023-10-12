@@ -5,21 +5,28 @@ export interface User {
     email: string,
     avatar?: string,
     bio?: string,
-    created_at?: string,
-    updated_at?: string,
+    banner?: string,
     threads?: Thread[],
-    replies?: Reply[]
+    replies?: Reply[],
+    created_at?: string,
+    updated_at?: string
+}
+
+export interface Profile {
+    avatar?: MediaSource | Blob | string,
+    bio?: string,
+    banner?: MediaSource | Blob | string
 }
 
 export interface Thread {
     id: number,
     content: string,
     image?: string ,
-    is_liked: boolean,
-    number_of_likes: number,
-    created_at: string
     user: User,
-    replies: Reply[]
+    likes?: Like[],
+    is_liked: boolean,
+    replies?: Reply[],
+    created_at: string
 }
 
 export interface ThreadPost {
@@ -32,7 +39,6 @@ export interface Reply {
     content: string,
     image: string,
     is_liked: boolean,
-    number_of_likes: number,
     created_at: string,
     thread: Thread,
     user: User,
@@ -42,4 +48,10 @@ export interface ReplyPost {
     content: string,
     image?: MediaSource | Blob | string,
     thread_id?: number
+}
+
+export interface Like {
+    id: number,
+    thread: Thread,
+    user: User
 }

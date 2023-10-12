@@ -45,7 +45,8 @@ class UsersService {
             email,
             password,
             avatar,
-            bio
+            bio,
+            banner
         } = req.body
         try {
             const newUser = this.userRepository.create({
@@ -54,7 +55,8 @@ class UsersService {
                 email,
                 password,
                 avatar,
-                bio
+                bio,
+                banner
             })
             const saveNewUser = await this.userRepository.save(newUser)
             return res.status(201).json(saveNewUser)
@@ -72,7 +74,8 @@ class UsersService {
             email,
             password, 
             avatar, 
-            bio 
+            bio,
+            banner 
         } = req.body
         try {
             const findAUser = await this.userRepository.findOne({ where: { id: id } })
@@ -97,6 +100,9 @@ class UsersService {
             if (bio !== undefined && bio !== "") {
                 findAUser.bio = bio
             }
+            if (banner !== undefined && bio !== "") {
+                findAUser.banner = banner
+            }
             const saveChanges = await this.userRepository.save(findAUser)
             return res.status(200).json(saveChanges)
         } catch (error) {
@@ -110,7 +116,7 @@ class UsersService {
         try {
             const findAUser = await this.userRepository.findOne({ where: { id: id } })
             if (!findAUser) {
-                return res.status(404).json({ error: "User not found" })
+                return res.status(404).json({ Message: "User not found" })
             }
             await this.userRepository.remove(findAUser)
             return res.status(204).send()

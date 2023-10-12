@@ -22,8 +22,6 @@ class ReplyQueue {
 
       const loginSession = res.locals.loginSession
 
-      const relatedThread = res.locals.relatedThread
-
       const payload = {
         thread_id: data.thread_id,
         content: data.content,

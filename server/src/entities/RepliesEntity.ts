@@ -7,10 +7,10 @@ export class Reply {
     @PrimaryGeneratedColumn()
     id: number
 
-    @ManyToOne(() => Thread, (thread) => thread.replies, {onDelete: "CASCADE", onUpdate: "CASCADE"})
+    @ManyToOne(() => Thread, (thread) => thread.replies, {onDelete: "CASCADE", onUpdate: "RESTRICT"})
     thread: Thread
 
-    @ManyToOne(() => User, (user) => user.replies, {onDelete: "CASCADE", onUpdate: "CASCADE"})
+    @ManyToOne(() => User, (user) => user.replies, {onDelete: "CASCADE", onUpdate: "RESTRICT"})
     user: User
 
     @Column()

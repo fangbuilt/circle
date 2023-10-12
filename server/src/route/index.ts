@@ -9,6 +9,7 @@ import { upload } from "../middlewares/FileUpload"
 import QueueController from "../queues/ThreadQueue"
 import ThreadQueue from "../queues/ThreadQueue"
 import ReplyQueue from "../queues/ReplyQueue"
+import LikesController from "../controllers/LikesController"
 
 const router = express.Router()
 
@@ -42,6 +43,8 @@ router.patch("/thread/:id", authenticate, ThreadsController.update)
 router.delete("/thread/:id", authenticate, ThreadsController.delete)
 
 //likes routes
+router.post("/like", authenticate, LikesController.create)
+router.delete("/like/:thread_id", authenticate, LikesController.delete)
 
 //replies routes
 router.get("/replies", authenticate, RepliesController.findAll)

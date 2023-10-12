@@ -1,6 +1,5 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
-import { Thread } from "./entities/ThreadsEntity"
 
 export const AppDataSource = new DataSource({
     type: "postgres",

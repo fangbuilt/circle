@@ -43,12 +43,12 @@ export default function ThreadCardDetail() {
             </HStack>
             <HStack spacing={4} mt={2}>
               {thread.is_liked ?
-                <Button colorScheme='red' variant={"ghost"} leftIcon={<HeartFill />}>{thread.number_of_likes}</Button>
+                <Button colorScheme='red' variant={"ghost"} leftIcon={<HeartFill />}>{thread.likes?.length}</Button>
                 :
-                <Button variant={"ghost"} leftIcon={<Heart />} textColor={"GrayText"}>{thread.number_of_likes}</Button>
+                <Button variant={"ghost"} leftIcon={<Heart />} textColor={"GrayText"}>{thread.likes?.length}</Button>
               }
               <Button variant={"ghost"} leftIcon={<ChatSquareText />} textColor={"GrayText"}>
-                {thread.replies.length == 0 ? "" : thread.replies.length} {thread.replies.length > 1 ? "Replies" : "Reply"}
+                {thread.replies?.length == 0 ? "" : thread.replies?.length} {thread.replies?.length > 1 ? "Replies" : "Reply"}
               </Button>
             </HStack>
           </Stack>
