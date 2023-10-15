@@ -10,7 +10,7 @@ export const AppDataSource = new DataSource({
     database: "db_circle",
     synchronize: true,
     logging: false,
-    entities: ["src/entities/*.ts"],
+    entities: [__dirname + "/entities/*.ts"], //screw you dirname
     migrations: ["src/migrations/*.ts"],
     subscribers: [],
 })

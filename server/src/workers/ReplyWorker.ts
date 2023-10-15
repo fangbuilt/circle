@@ -14,7 +14,7 @@ class ReplyWorker {
           console.log("Received message: ", payload)
           let cloudRes: UploadApiResponse | null = null
           if (payload.image) {
-            cloudRes = await cloudinary.uploader.upload(`./uploads/${payload.image}`)
+            cloudRes = await cloudinary.uploader.upload(`../../uploads/${payload.image}`)
           }
           const reply = AppDataSource.getRepository(Reply).create({
             thread: { id: payload.thread_id },

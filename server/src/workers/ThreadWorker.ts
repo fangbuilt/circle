@@ -16,7 +16,7 @@ class ThreadWorker {
             console.log("Received message: ", payload)
             let cloudRes: UploadApiResponse | null = null
             if (payload.image) {
-              cloudRes = await cloudinary.uploader.upload(`./uploads/${payload.image}`)
+              cloudRes = await cloudinary.uploader.upload(`../../uploads/${payload.image}`)
             }
             const thread = AppDataSource.getRepository(Thread).create({
               content: payload.content,
