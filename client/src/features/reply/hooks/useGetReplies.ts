@@ -4,22 +4,22 @@ import { useQuery } from "@tanstack/react-query"
 import { Reply } from "../../../interfaces/featureInterfaces"
 
 export default function useGetReplies() {
-    const { id } = useParams()
+  const { id } = useParams()
 
-    const fetch = async () => {
-        try {
-            const response = await API.get(`/replies?thread_id=${id}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.token}`
-                }
-            })
-            return response.data
-        } catch (error) {
-            throw new Error("Error while getting reply data")
+  const fetch = async () => {
+    try {
+      const response = await API.get(`/replies?thread_id=${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.token}`
         }
+      })
+      return response.data
+    } catch (error) {
+      throw new Error("Error while getting reply data")
     }
+  }
 
-    const { data, isLoading, isError } = useQuery<Reply[]>(["replies"], fetch)
+  const { data, isLoading, isError } = useQuery<Reply[]>(["replies"], fetch)
 
-    return { data, isLoading, isError }
+  return { data, isLoading, isError }
 }

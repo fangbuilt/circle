@@ -44,7 +44,7 @@ router.delete("/thread/:id", authenticate, ThreadsController.delete)
 
 //likes routes
 router.post("/like", authenticate, LikesController.create)
-router.delete("/like/:thread_id", authenticate, LikesController.delete)
+router.delete("/unlike/:thread_id", authenticate, LikesController.delete)
 
 //replies routes
 router.get("/replies", authenticate, RepliesController.findAll)

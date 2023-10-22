@@ -1,4 +1,4 @@
-import { Image, Button, Text, HStack, Divider, Avatar, Stack, Flex } from "@chakra-ui/react"
+import { Image, Button, Text, HStack, Divider, Avatar, Stack, Flex, Heading } from "@chakra-ui/react"
 import { ChatSquareText, Heart, HeartFill } from "react-bootstrap-icons"
 import { Link, useNavigate } from "react-router-dom"
 import { Thread } from "../../../interfaces/featureInterfaces";
@@ -6,14 +6,14 @@ import { formatDistanceToNow } from "date-fns"
 import React from "react";
 import ErrorMessage from "../../../components/Error";
 import Loading from "../../../components/Loading";
-import useGetThreads from "../hooks/useGetThreads";
+import useGetUserThreads from "../hooks/useGetUserThreads";
 import useLike from "../../like/hooks/useLike";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../stores/types/rootState";
 
-export default function ThreadCard() {
+export default function UserThreadCard() {
   const navigate = useNavigate()
-  const { data, isLoading, isError } = useGetThreads()
+  const { data, isLoading, isError } = useGetUserThreads()
   const { handleLike, handleUnlike } = useLike()
   const auth = useSelector((state: RootState) => state.auth)
 
@@ -30,7 +30,7 @@ export default function ThreadCard() {
   // console.log(data)
   return (
     <Stack py={4} spacing={4}>
-      {data && (
+      {data ? (
         data.map((thread: Thread, index: number) => (
           <React.Fragment key={index}>
             <Flex align={"start"} gap={4} px={4}>
@@ -44,7 +44,6 @@ export default function ThreadCard() {
                     {formatDistanceToNow(new Date(thread.created_at), { addSuffix: true })}
                   </Text>
                 </HStack>
-
                 <Stack spacing={4}>
                   <Link to={`/thread/${thread.id}`}>
                     <Text>{thread.content}</Text>
@@ -54,7 +53,8 @@ export default function ThreadCard() {
                       src={thread.image}
                       alt="User Attachment"
                       borderRadius='.5rem'
-                      w='30em' h='24em'
+                      w='30em'
+                      h='24em'
                       objectFit='cover'
                     />
                   )}
@@ -91,14 +91,16 @@ export default function ThreadCard() {
                     textColor={"GrayText"}
                     onClick={() => navigate(`/thread/${thread.id}`)}
                   >
-                    {thread.replies?.length == 0
-                      ? ""
-                      : thread.replies?.length
+                    {
+                      thread.replies?.length == 0
+                        ? ""
+                        : thread.replies?.length
                     }
                     {" "}
-                    {thread.replies && thread.replies.length > 1
-                      ? "Replies"
-                      : "Reply"
+                    {
+                      thread.replies && thread.replies.length > 1
+                        ? "Replies"
+                        : "Reply"
                     }
                   </Button>
                 </HStack>
@@ -107,6 +109,11 @@ export default function ThreadCard() {
             <Divider />
           </React.Fragment>
         ))
+      ) : (
+        <Flex direction={"column"} justify={"center"} align={"center"} h={"xl"}>
+          <Heading size={"md"}>Zonk</Heading>
+          <Text textColor={"GrayText"}>Nothing to see here.... yet</Text>
+        </Flex>
       )}
     </Stack>
   )

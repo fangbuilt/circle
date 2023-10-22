@@ -3,7 +3,7 @@ import { authSlice } from "./slices/authSlice";
 import { likeSlice } from "./slices/likeSlice";
 
 export const { AUTH_CHECK, AUTH_LOGIN, AUTH_ERROR, AUTH_LOGOUT } = authSlice.actions
-export const { SET_THREAD_LIKE } = likeSlice.actions
+export const { SET_THREADS } = likeSlice.actions
 
 export const authReducer = authSlice.reducer
 export const likeReducer = likeSlice.reducer

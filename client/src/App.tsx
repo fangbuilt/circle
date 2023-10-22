@@ -14,7 +14,7 @@ import { Profile } from './pages/Profile'
 const queryClient = new QueryClient()
 
 function App() {
-  const { isLoading } = useCheckAuth()
+  const { isAuthLoading } = useCheckAuth()
   const auth = useSelector((state: RootState) => state.auth)
 
   function IsLogin() {
@@ -35,7 +35,7 @@ function App() {
 
   return (
     <React.Fragment>
-      {isLoading ? (
+      {isAuthLoading ? (
         <Loading />
       ) : (
         <QueryClientProvider client={queryClient}>

@@ -2,6 +2,7 @@ import { Avatar, Box, Button, Divider, Flex, HStack, Heading, Image, Stack, Text
 import { ProfileLayout } from "../layouts/Layout";
 import { useSelector } from "react-redux";
 import { RootState } from "../stores/types/rootState";
+import UserThreadCard from "../features/thread/components/UserThreads";
 
 export function Profile() {
   const current = useSelector((state: RootState) => state.auth)
@@ -55,10 +56,7 @@ export function Profile() {
         </HStack>
       </Flex>
       <Divider />
-      <Flex direction={"column"} justify={"center"} align={"center"} h={"xl"}>
-        <Heading size={"md"}>Zonk</Heading>
-        <Text textColor={"GrayText"}>Nothing to see here.... yet</Text>
-      </Flex>
+      <UserThreadCard />
     </ProfileLayout>
   )
 }

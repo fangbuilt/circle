@@ -5,18 +5,20 @@ import { AUTH_CHECK, AUTH_ERROR } from "../stores/rootReducer"
 import { API, setAuthToken } from "../lib/api"
 
 export default function useCheckAuth() {
-const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isAuthLoading, setIsAuthLoading] = useState<boolean>(true)
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   async function checkAuth() {
     try {
       const response = await API.get("/auth/check")
-      dispatch(AUTH_CHECK(response.data))
-      setIsLoading(false)
+      const data = response.data
+      console.log(data.id)
+      dispatch(AUTH_CHECK(data))
+      setIsAuthLoading(false)
     } catch (error) {
       dispatch(AUTH_ERROR())
-      setIsLoading(false)
+      setIsAuthLoading(false)
       navigate("/auth/login")
     }
   }
@@ -31,10 +33,12 @@ const [isLoading, setIsLoading] = useState<boolean>(true)
           console.log({ error })
         }
       }
-      setIsLoading(false)
+      setIsAuthLoading(false)
     }
     handleAuth()
   }, [])
 
-  return { isLoading }
+  return {
+    isAuthLoading
+  }
 }

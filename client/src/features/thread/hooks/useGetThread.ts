@@ -19,7 +19,10 @@ export default function useGetThread() {
     }
   }
 
-  const { data, isLoading, isError } = useQuery<Thread>(["thread", id], fetch)
+  const { data, isLoading, isError } = useQuery<Thread>(
+    ["thread", id],
+    fetch
+  )
 
   return { data, isLoading, isError }
 }

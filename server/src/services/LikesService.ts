@@ -37,13 +37,14 @@ class LikesService {
 
   //unlike a thread
   async delete(req: Request, res: Response): Promise<Response> {
-    const id = parseInt(req.params.id)
-    const thread_id = req.body.thread_id
+    const thread_id = parseInt(req.params.thread_id)
+    if (isNaN(thread_id)) {
+      return res.status(400).json({Message: "Invalid thread ID"})
+    }
     const loginSession = res.locals.loginSession
     try {
       const existingLike = await this.likeRepository.findOne({
         where: {
-          id: id,
           thread: { id: thread_id },
           user: { id: loginSession.findAccount.id }
         }

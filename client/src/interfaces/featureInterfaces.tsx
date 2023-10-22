@@ -24,7 +24,6 @@ export interface Thread {
     image?: string ,
     user: User,
     likes?: Like[],
-    is_liked: boolean,
     replies?: Reply[],
     created_at: string
 }

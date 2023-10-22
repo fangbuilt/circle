@@ -15,11 +15,12 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: initialAuthState,
   reducers: {
-    AUTH_LOGIN: (_, action) => {
+    AUTH_LOGIN: (state, action) => {
       const payload = action.payload
       setAuthToken(payload.token)
       localStorage.setItem("token", payload.token)
-      const current: User = {
+      return {
+        ...state,
         id: payload.id,
         full_name: payload.full_name,
         username: payload.username,
@@ -27,18 +28,17 @@ export const authSlice = createSlice({
         avatar: payload.avatar,
         bio: payload.bio
       }
-      return current
     },
-    AUTH_CHECK: (_, action) => {
+    AUTH_CHECK: (state, action) => {
       const payload = action.payload
       setAuthToken(payload.token)
-      const current: User = {
+      return {
+        ...state,
         id: payload.id,
         full_name: payload.full_name,
         username: payload.username,
         email: payload.email
       }
-      return current
     },
     AUTH_ERROR: () => {
       localStorage.removeItem("token")
