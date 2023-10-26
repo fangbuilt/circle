@@ -74,7 +74,7 @@ class ThreadsService {
     try {
       const findAThread = await this.threadRepository.findOne({
         where: { id: id },
-        relations: ["user", "replies"]
+        relations: ["user", "replies", "likes.user"]
       })
       findAThread.image = findAThread.image && `${findAThread.image}`
       if (!findAThread) {

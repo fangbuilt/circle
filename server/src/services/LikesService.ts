@@ -39,7 +39,7 @@ class LikesService {
   async delete(req: Request, res: Response): Promise<Response> {
     const thread_id = parseInt(req.params.thread_id)
     if (isNaN(thread_id)) {
-      return res.status(400).json({Message: "Invalid thread ID"})
+      return res.status(400).json({ Message: "Invalid thread ID" })
     }
     const loginSession = res.locals.loginSession
     try {

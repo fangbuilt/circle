@@ -10,6 +10,8 @@ import QueueController from "../queues/ThreadQueue"
 import ThreadQueue from "../queues/ThreadQueue"
 import ReplyQueue from "../queues/ReplyQueue"
 import LikesController from "../controllers/LikesController"
+import ReplyLikesController from "../controllers/ReplyLikesController"
+import FollowsController from "../controllers/FollowsController"
 
 const router = express.Router()
 
@@ -46,6 +48,10 @@ router.delete("/thread/:id", authenticate, ThreadsController.delete)
 router.post("/like", authenticate, LikesController.create)
 router.delete("/unlike/:thread_id", authenticate, LikesController.delete)
 
+//reply likes routes
+router.post("/reply_like", authenticate, ReplyLikesController.create)
+router.delete("/reply_unlike/:reply_id", authenticate, ReplyLikesController.delete)
+
 //replies routes
 router.get("/replies", authenticate, RepliesController.findAll)
 router.get("/reply/:id", authenticate, RepliesController.findByID)
@@ -54,5 +60,8 @@ router.patch("/reply/:id", authenticate, RepliesController.update)
 router.delete("/reply/:id", authenticate, RepliesController.delete)
 
 //follow routes
+router.get("/follows", authenticate, FollowsController.findAll)
+router.post("/follow", authenticate, FollowsController.create)
+router.delete("/unfollow/following_user_id", authenticate, FollowsController.delete)
 
 export default router

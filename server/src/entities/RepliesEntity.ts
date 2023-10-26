@@ -1,16 +1,17 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 import { Thread } from "./ThreadsEntity"
 import { User } from "./UsersEntity"
+import { ReplyLike } from "./ReplyLikesEntity"
 
 @Entity({ name: "replies" })
 export class Reply {
     @PrimaryGeneratedColumn()
     id: number
 
-    @ManyToOne(() => Thread, (thread) => thread.replies, {onDelete: "CASCADE", onUpdate: "RESTRICT"})
+    @ManyToOne(() => Thread, (thread) => thread.replies, { onDelete: "CASCADE", onUpdate: "RESTRICT" })
     thread: Thread
 
-    @ManyToOne(() => User, (user) => user.replies, {onDelete: "CASCADE", onUpdate: "RESTRICT"})
+    @ManyToOne(() => User, (user) => user.replies, { onDelete: "CASCADE", onUpdate: "RESTRICT" })
     user: User
 
     @Column()
@@ -19,13 +20,11 @@ export class Reply {
     @Column({ nullable: true })
     image: string
 
-    //Temporary. Omit after like shenanigans are understandable
-    @Column({ nullable: true })
-    is_liked: boolean
-
-    //Temporary. Omit after like shenanigans are understandable
-    @Column({ nullable: true })
-    number_of_likes: number
+    @OneToMany(() => ReplyLike,
+        (reply_likes) => reply_likes.reply,
+        { onDelete: "CASCADE", onUpdate: "RESTRICT" }
+    )
+    reply_likes: ReplyLike[]
 
     @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
     created_at: Date

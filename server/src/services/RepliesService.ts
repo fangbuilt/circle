@@ -2,9 +2,7 @@ import { Repository } from "typeorm";
 import { Reply } from "../entities/RepliesEntity";
 import { AppDataSource } from "../data-source";
 import { Request, Response } from "express";
-import { Thread } from "../entities/ThreadsEntity";
-import { User } from "../entities/UsersEntity";
-import { CreateReplySchema, UpdateReplySchema } from "../validator/RepliesValidator";
+import { UpdateReplySchema } from "../validator/RepliesValidator";
 
 class RepliesService {
   private readonly replyRepository: Repository<Reply> =
@@ -19,28 +17,30 @@ class RepliesService {
       if (thread_id) {
         const findAllRepliesByThread = await this.replyRepository.find({
           where: { thread: { id: thread_id } },
-          relations: ["thread", "user"],
+          relations: ["thread", "user", "reply_likes.user"],
           order: {
             id: "DESC"
           }
         })
-        if (!findAllRepliesByThread) {
+        if (!findAllRepliesByThread && !thread_id) {
           return res.status(404).json({ Message: `No replies available for thread id ${thread_id}` })
         }
         return res.status(200).json(findAllRepliesByThread)
+
       } else if (user_id) {
         const findRepliesByUser = await this.replyRepository.find({
-          where: {user: {id: user_id}},
-          relations: ["thread", "user"],
-          order: {created_at: "DESC"}
+          where: { user: { id: user_id } },
+          relations: ["thread", "user", "reply_likes.user"],
+          order: { created_at: "DESC" }
         })
         findRepliesByUser.forEach((Reply) => {
           Reply.image = Reply.image && `${Reply.image}`
         })
-        if (!findRepliesByUser) {
-          return res.status(404).json({error: "No replies available from this user"})
+        if (!findRepliesByUser && !user_id) {
+          return res.status(404).json({ error: "No replies available from this user" })
         }
         return res.status(200).json(findRepliesByUser)
+
       } else {
         const findReplies = await this.replyRepository.find({ relations: ["thread", "user"] })
         if (!findReplies.length) {
@@ -59,7 +59,7 @@ class RepliesService {
     try {
       const findAReply = await this.replyRepository.findOne({
         where: { id: id },
-        relations: ["thread", "user"]
+        relations: ["thread", "user", "reply_likes.user"]
       })
       if (!findAReply) {
         return res.status(404).json({ Message: "Can't find this reply" })
